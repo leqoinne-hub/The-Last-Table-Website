@@ -24,11 +24,10 @@ jobs:
           git diff --exit-code -- squarespace/generated \
             || { echo "::error::squarespace/generated is out of date. Run npm run build and commit the result."; exit 1; }
 
-  # Publishes a preview to GitHub Pages. Off until you turn it on:
-  # Settings → Pages → Source: GitHub Actions, then Settings → Secrets and variables → Actions →
-  # Variables → New variable DEPLOY_TO_PAGES = true.
+  # Publishes the site to GitHub Pages on every push to main (and on a manual run).
+  # Needs Settings → Pages → Source: GitHub Actions, with main as the default branch.
   deploy:
-    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main' && vars.DEPLOY_TO_PAGES == 'true'
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
     needs: check
     runs-on: ubuntu-latest
     permissions:

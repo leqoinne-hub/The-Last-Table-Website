@@ -39,7 +39,7 @@ Each build ends with a **"Still needed before launch"** list. It reads the conte
 ## Put it online
 
 - **Netlify** (easiest): connect this repository and it builds itself (`netlify.toml`). Point `thelasttablechicago.com` at it when you're ready.
-- **GitHub Pages** (free preview link): Settings → Pages → Source: *GitHub Actions*, then add the repository variable `DEPLOY_TO_PAGES` = `true` (Settings → Secrets and variables → Actions → Variables). Every push to `main` then publishes. Private repositories need a paid GitHub plan for Pages.
+- **GitHub Pages** (free preview link): make `main` the default branch (Settings → General), then set Settings → Pages → Source to *GitHub Actions*. Every push to `main` then publishes to https://leqoinne-hub.github.io/The-Last-Table-Website/. Private repositories need a paid GitHub plan for Pages.
 - **Squarespace**: follow `squarespace/README.md`.
 
 ### Forms
