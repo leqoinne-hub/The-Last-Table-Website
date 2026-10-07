@@ -27,7 +27,7 @@ export default {
   render(ctx) {
     const { site } = ctx;
     if (site.spaces.some((s) => s.seated === null || s.standing === null)) ctx.todo('Private dining capacities (content/site.js → spaces; fire-marshal numbers)');
-    const action = site.forms.inquiry || mailHref(ctx, 'Private dining inquiry');
+    const action = site.forms.inquiry || mailHref(ctx, 'Private dining inquiry', site.eventsEmail);
     return html`
 <section class="ground-forest">
   ${pageHeader({ kicker: 'Private dining & events', title: 'Close the doors.', lede: "Rehearsal dinners, birthdays, a client dinner, a quiet buyout on a Tuesday. Tell us the night and we'll build it around you." })}
@@ -65,12 +65,12 @@ export default {
           <textarea id="f-notes" name="notes" rows="4"></textarea>
         </div>
         <button class="btn btn--fill" type="submit">Send inquiry</button>
-        <p class="form-error" id="f-submit-err" role="alert" hidden>That didn't go through. Please try again, or write to ${site.email}.</p>
+        <p class="form-error" id="f-submit-err" role="alert" hidden>That didn't go through. Please try again, or write to ${site.eventsEmail}.</p>
       </form>
       <div class="inquiry-done" tabindex="-1" role="status" hidden>
         <p class="label">Inquiry received</p>
         <p class="inquiry-done__title">Thank you, <span data-name></span>.</p>
-        <p class="inquiry-done__body">We'll be in touch within two business days. Questions in the meantime: ${site.email}.</p>
+        <p class="inquiry-done__body">We'll be in touch within two business days. Questions in the meantime: ${site.eventsEmail}.</p>
       </div>
     </div>
   </div>

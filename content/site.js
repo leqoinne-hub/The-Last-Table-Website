@@ -5,7 +5,8 @@ export const site = {
   name: 'The Last Table',
   descriptor: 'Supper Club · Chicago',
   url: 'https://www.thelasttablechicago.com', // overridden by the SITE_URL env var (e.g. a staging preview)
-  email: 'info@atthelasttable.com', // a different domain from the site: confirm it is intentional
+  email: 'info@thelasttablechicago.com',
+  eventsEmail: 'events@thelasttablechicago.com', // private dining inquiries and event questions
   phone: null, // e.g. '(312) 555-0100'; shows on Hours & Contact and in the structured data
   instagram: { handle: 'thelasttablechicago', url: 'https://instagram.com/thelasttablechicago' },
 
@@ -31,15 +32,15 @@ export const site = {
   // Hours, as shown on the site. `schema` feeds the Google structured data.
   hours: [
     { days: 'Monday – Thursday', time: '4 PM – 2 AM', schema: [{ days: ['Monday', 'Tuesday', 'Wednesday', 'Thursday'], opens: '16:00', closes: '02:00' }] },
-    { days: 'Friday – Saturday', time: '4 PM – 3:30 AM', schema: [{ days: ['Friday', 'Saturday'], opens: '16:00', closes: '03:30' }] },
-    { days: 'Sunday', time: 'Brunch 9 AM – 3 PM · Dinner 5 PM – 2 AM', schema: [{ days: ['Sunday'], opens: '09:00', closes: '15:00' }, { days: ['Sunday'], opens: '17:00', closes: '02:00' }] },
+    { days: 'Friday – Saturday', time: '4 PM – 4 AM', schema: [{ days: ['Friday', 'Saturday'], opens: '16:00', closes: '04:00' }] },
+    { days: 'Sunday', time: 'Jazz brunch 9 AM – 3 PM · Dinner 4 PM – 2 AM', schema: [{ days: ['Sunday'], opens: '09:00', closes: '15:00' }, { days: ['Sunday'], opens: '16:00', closes: '02:00' }] },
   ],
-  hoursShort: 'Mon–Thu 4 PM–2 AM · Fri–Sat 4 PM–3:30 AM · Sun brunch 9 AM–3 PM, dinner 5 PM–2 AM',
+  hoursShort: 'Mon–Thu 4 PM–2 AM · Fri–Sat 4 PM–4 AM · Sun jazz brunch 9 AM–3 PM, dinner 4 PM–2 AM',
   // "Tonight" line, indexed by day of week (0 = Sunday). Read on Chicago time; until 4 AM it is still last night.
   tonight: [
-    'Brunch 9 AM – 3 PM · 5 PM – 2 AM',
+    'Jazz brunch 9 AM – 3 PM · 4 PM – 2 AM',
     '4 PM – 2 AM', '4 PM – 2 AM', '4 PM – 2 AM', '4 PM – 2 AM',
-    '4 PM – 3:30 AM', '4 PM – 3:30 AM',
+    '4 PM – 4 AM', '4 PM – 4 AM',
   ],
 
   resy: {
@@ -49,7 +50,7 @@ export const site = {
   toast: { giftCardUrl: null }, // the Toast gift-card page; both gift-card buttons use it
 
   // Form endpoints that accept a POST of form fields (Formspree, Basin, Getform…).
-  // Without one, the form opens the guest's email app addressed to `email` above.
+  // Without one, the form opens the guest's email app: the newsletter to `email`, inquiries to `eventsEmail`.
   forms: { newsletter: null, inquiry: null },
 
   // Files that live in src/assets/downloads/. Links to them stay hidden until the file is there.

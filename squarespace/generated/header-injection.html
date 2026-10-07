@@ -7,7 +7,7 @@
 document.addEventListener('DOMContentLoaded', function () {
   // Tonight's hours: fills any element with [data-tlt-tonight] (add data-caps for capitals).
   // Read on Chicago time; until 4 AM it is still last night.
-  var TONIGHT = ["Brunch 9 AM – 3 PM · 5 PM – 2 AM","4 PM – 2 AM","4 PM – 2 AM","4 PM – 2 AM","4 PM – 2 AM","4 PM – 3:30 AM","4 PM – 3:30 AM"];
+  var TONIGHT = ["Jazz brunch 9 AM – 3 PM · 4 PM – 2 AM","4 PM – 2 AM","4 PM – 2 AM","4 PM – 2 AM","4 PM – 2 AM","4 PM – 4 AM","4 PM – 4 AM"];
   var dow = new Date(Date.now() - 4 * 36e5).getDay();
   try {
     var wd = new Intl.DateTimeFormat('en-US', { timeZone: 'America/Chicago', weekday: 'short' }).format(new Date(Date.now() - 4 * 36e5));

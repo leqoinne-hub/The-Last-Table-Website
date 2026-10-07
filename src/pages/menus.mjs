@@ -5,7 +5,7 @@ export default {
   id: 'menus',
   file: 'menus.html',
   title: 'Menus · The Last Table · Supper Club · Chicago',
-  description: 'The dinner, bar and Sunday brunch menus at The Last Table, a supper club at State & Erie in Chicago.',
+  description: 'The dinner, bar and Sunday jazz brunch menus at The Last Table, a supper club at State & Erie in Chicago.',
   render(ctx) {
     const pdfs = [['dinnerMenu', 'Dinner PDF'], ['barMenu', 'Bar PDF']].filter(([k]) => ctx.downloads[k]);
     return html`

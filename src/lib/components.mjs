@@ -74,16 +74,16 @@ export function pageHeader({ kicker, title, lede, width = '', rule = 'brass' }) 
   </div>`;
 }
 
-export function hoursRows(ctx, cls) {
-  return ctx.site.hours.map((h) => html`<div class="${cls}"><span class="${cls}-days">${h.days}</span><span class="${cls}-time">${h.time}</span></div>`);
+export function hoursRows(ctx, cls, modifier = '') {
+  return ctx.site.hours.map((h) => html`<div class="${cls}${modifier ? ` ${modifier}` : ''}"><span class="${cls}-days">${h.days}</span><span class="${cls}-time">${h.time}</span></div>`);
 }
 
 export function tonightDefault(ctx) {
   return ctx.site.tonight[1];
 }
 
-export function mailHref(ctx, subject) {
-  return `mailto:${ctx.site.email}${subject ? `?subject=${encodeURIComponent(subject)}` : ''}`;
+export function mailHref(ctx, subject, to = ctx.site.email) {
+  return `mailto:${to}${subject ? `?subject=${encodeURIComponent(subject)}` : ''}`;
 }
 
 export function resyHref(ctx) {
@@ -202,6 +202,7 @@ export function layout(ctx, page, body) {
     openAt: site.launch.openAt,
     tonight: site.tonight,
     email: site.email,
+    eventsEmail: site.eventsEmail,
     forms: site.forms,
   };
   const ga = site.googleAnalyticsId;

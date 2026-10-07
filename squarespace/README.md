@@ -12,6 +12,10 @@ Build the rest with native blocks (Form, Newsletter, Events, Map, Accordion, Ins
 | `countdown-code-block.html` | Home → a Code block under the hero until opening. It hides itself at 4 PM on November 17. |
 | `generated/menus-code-block.html` | Menus → one Code block. It holds the DINNER · BAR · BRUNCH tabs with every menu pre-rendered. |
 
+## Email routing
+- **Private Dining form block** → Storage: Email → **events@thelasttablechicago.com**. The handoff said info@; ownership has since moved inquiries to the events inbox.
+- Everything else (newsletter notices, general contact) → **info@thelasttablechicago.com**.
+
 ## Keep it in sync
 Files in `generated/` are rebuilt from `content/` every time someone runs `npm run build`, so menus, hours and FAQ answers are edited in one place only.
 After a menu change, re-copy `generated/menus-code-block.html` into the Menus code block.

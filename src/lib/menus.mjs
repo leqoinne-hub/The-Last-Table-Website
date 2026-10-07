@@ -20,7 +20,7 @@ export function menuGroups(pages, tab) {
   const brunch = pages.filter((p) => p.menu === 'bar').flatMap((p) => p.columns.flat()).filter((s) => /brunch/i.test(s.head || ''));
   return [{
     showHead: true,
-    kicker: 'Sunday Brunch · 9 AM – 3 PM',
+    kicker: 'Sunday Jazz Brunch · 9 AM – 3 PM',
     title: 'The first seating',
     sections: [...brunch, { head: 'From the Kitchen', items: [], note: 'The brunch food menu arrives before opening day.' }],
   }];

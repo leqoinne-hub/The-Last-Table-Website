@@ -43,7 +43,7 @@ Each build ends with a **"Still needed before launch"** list. It reads the conte
 - **Squarespace**: follow `squarespace/README.md`.
 
 ### Forms
-Squarespace handles forms natively. On the static site, set `forms.newsletter` and `forms.inquiry` in `content/site.js` to a form service endpoint such as Formspree, Basin or Getform. Until then, the signup and private-dining forms still validate, then open the guest's email app with everything filled in and addressed to info@atthelasttable.com.
+Squarespace handles forms natively. On the static site, set `forms.newsletter` and `forms.inquiry` in `content/site.js` to a form service endpoint such as Formspree, Basin or Getform. Until then, the signup and private-dining forms still validate, then open the guest's email app with everything filled in: signups go to info@thelasttablechicago.com and private dining inquiries to events@thelasttablechicago.com.
 
 ## Still needed from ownership
 The build lists these live. The full list is:
@@ -55,13 +55,11 @@ The build lists these live. The full list is:
 - Valet and parking details · kitchen closing time · holiday-hours process
 - **Approval of the draft policies**: dress code wording · 21+ after 10 PM · $25 no-show fee and 24-hour window · 30-day booking window and 15-minute hold · $50 corkage (two bottles) · no cover for dinner guests · walk-in bar · two-business-day reply on inquiries
 - **Counsel review** of the draft Privacy and Terms pages
-- Confirm that **info@atthelasttable.com** (a different domain from the website) is intentional
 
 ## Decisions made during the build
 
 These are places where the build departs from, or fills a gap in, the handoff. Each one is easy to reverse.
 
-- **Founder title.** The handoff README signs Our Story "Owner", while the prototype and fact sheet say "Co-Founder". The site uses **Co-Founder**. Change it in `content/site.js` → `founder`.
 - **Footer fine print.** The copyright row uses `#8E846F` instead of `#6B5A3E`. The original measures 2.9:1 on the footer background, which fails WCAG AA; the new color measures 5.3:1.
 - **Chicago time.** "Tonight" hours and past-event hiding use Chicago time, and the night rolls over at 4 AM. At 1 AM Saturday the site still shows Friday's hours. The handoff used the visitor's own clock.
 - **Sample events.** The six sample nights from the prototype were moved to the opening weeks (Nov 20 – Dec 3) so the calendar isn't empty in the preview.

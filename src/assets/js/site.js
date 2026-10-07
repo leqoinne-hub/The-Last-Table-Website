@@ -127,8 +127,8 @@
   window.addEventListener('hashchange', openFromHash);
 
   // ---------- Forms ----------
-  function mailto(subject, body) {
-    location.href = 'mailto:' + config.email + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+  function mailto(to, subject, body) {
+    location.href = 'mailto:' + to + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
   }
 
   function post(endpoint, form) {
@@ -159,7 +159,7 @@
         post(config.forms.newsletter, form).then(function () { finish(done.getAttribute('data-done')); })
           .catch(function () { err.textContent = 'That didn’t go through. Please try again, or write to ' + config.email + '.'; err.hidden = false; });
       } else {
-        mailto('Join the list', 'Please add ' + email + ' to The Last Table list.');
+        mailto(config.email, 'Join the list', 'Please add ' + email + ' to The Last Table list.');
         finish('Your email app should open. Send the message and you’re on the list.');
       }
     });
@@ -208,7 +208,7 @@
         post(config.forms.inquiry, inquiry).then(function () { finish(); })
           .catch(function () { submitErr.hidden = false; btn.disabled = false; });
       } else {
-        mailto('Private dining inquiry — ' + f.date.value + ', ' + f.guests.value + ' guests', [
+        mailto(config.eventsEmail || config.email, 'Private dining inquiry — ' + f.date.value + ', ' + f.guests.value + ' guests', [
           'Name: ' + f.name.value.trim(),
           'Email: ' + f.email.value.trim(),
           'Phone: ' + (f.phone.value.trim() || '—'),
