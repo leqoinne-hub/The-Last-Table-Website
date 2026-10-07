@@ -1,0 +1,30 @@
+<!-- The Last Table — Coming-soon countdown. Paste into a Code block under the hero on Home. Remove after opening (or it hides itself). -->
+<div id="tlt-countdown" style="display:flex;flex-direction:column;align-items:center;gap:26px;width:min(600px,100%);margin:0 auto;text-align:center;">
+  <div style="font:600 12px/1 'Jost',sans-serif;letter-spacing:.4em;color:#A88B55;">COMING SOON</div>
+  <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(8px,2vw,18px);width:100%;">
+    <div class="tlt-cd"><span data-u="d">00</span><small>DAYS</small></div>
+    <div class="tlt-cd"><span data-u="h">00</span><small>HOURS</small></div>
+    <div class="tlt-cd"><span data-u="m">00</span><small>MINUTES</small></div>
+    <div class="tlt-cd"><span data-u="s">00</span><small>SECONDS</small></div>
+  </div>
+  <p style="margin:0;font:italic clamp(22px,2.6vw,30px)/1.35 'Bodoni Moda',serif;color:#E3D6BC;">Doors open to the public November 17 at 4 PM. Join the list for first word.</p>
+</div>
+<style>
+  .tlt-cd{border:1px solid rgba(168,139,85,.45);padding:clamp(14px,2.4vw,22px) 4px;display:flex;flex-direction:column;align-items:center;gap:10px}
+  .tlt-cd span{font:400 clamp(34px,5vw,56px)/1 'Limelight',serif;color:#E3D6BC;font-variant-numeric:tabular-nums}
+  .tlt-cd small{font:500 10px/1 'Jost',sans-serif;letter-spacing:.3em;color:#A88B55}
+</style>
+<script>
+(function () {
+  var OPEN_AT = Date.parse('2026-11-17T16:00:00-06:00'); // Nov 17, 2026 · 4 PM Chicago (CST)
+  var root = document.getElementById('tlt-countdown');
+  function pad(n) { return String(n).padStart(2, '0'); }
+  function tick() {
+    var ms = OPEN_AT - Date.now();
+    if (ms <= 0) { root.style.display = 'none'; clearInterval(t); return; }
+    var v = { d: Math.floor(ms / 864e5), h: Math.floor(ms / 36e5) % 24, m: Math.floor(ms / 6e4) % 60, s: Math.floor(ms / 1e3) % 60 };
+    root.querySelectorAll('[data-u]').forEach(function (el) { el.textContent = pad(v[el.dataset.u]); });
+  }
+  var t = setInterval(tick, 1000); tick();
+})();
+</script>

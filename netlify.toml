@@ -1,0 +1,7 @@
+# Netlify: connect the repository and it builds with these settings. No other setup needed.
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "22"

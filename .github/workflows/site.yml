@@ -1,0 +1,55 @@
+name: Site
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Build and check every page
+        run: npm run check
+      - name: Squarespace kit matches the content
+        run: |
+          git diff --exit-code -- squarespace/generated \
+            || { echo "::error::squarespace/generated is out of date. Run npm run build and commit the result."; exit 1; }
+
+  # Publishes a preview to GitHub Pages. Off until you turn it on:
+  # Settings → Pages → Source: GitHub Actions, then Settings → Secrets and variables → Actions →
+  # Variables → New variable DEPLOY_TO_PAGES = true.
+  deploy:
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main' && vars.DEPLOY_TO_PAGES == 'true'
+    needs: check
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - id: pages
+        uses: actions/configure-pages@v5
+      - name: Build for the Pages address
+        run: npm run build
+        env:
+          SITE_URL: ${{ steps.pages.outputs.base_url }}
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+      - id: deployment
+        uses: actions/deploy-pages@v4

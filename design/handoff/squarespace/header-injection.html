@@ -1,0 +1,24 @@
+<!-- The Last Table — Settings → Advanced → Code Injection → Header -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Limelight&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..700&family=Jost:wght@400;500;600&display=swap" rel="stylesheet">
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  // Tonight's hours — any element with [data-tlt-tonight]
+  var d = new Date().getDay();
+  var tonight = d === 0 ? 'Brunch 9 AM – 3 PM · 5 PM – 2 AM' : d >= 5 ? '4 PM – 3:30 AM' : '4 PM – 2 AM';
+  document.querySelectorAll('[data-tlt-tonight]').forEach(function (el) { el.textContent = el.hasAttribute('data-caps') ? tonight.toUpperCase() : tonight; });
+
+  // Menus toggle — .tlt-tabs buttons with data-panel="dinner|bar|brunch", panels .tlt-menu-panel[data-panel]
+  var tabs = document.querySelectorAll('.tlt-tabs button');
+  if (tabs.length) {
+    var ids = ['dinner', 'bar', 'brunch'];
+    var show = function (id) {
+      tabs.forEach(function (b) { b.setAttribute('aria-selected', b.dataset.panel === id ? 'true' : 'false'); });
+      document.querySelectorAll('.tlt-menu-panel').forEach(function (p) { p.hidden = p.dataset.panel !== id; });
+    };
+    tabs.forEach(function (b) { b.addEventListener('click', function () { show(b.dataset.panel); history.replaceState(null, '', '?tab=' + b.dataset.panel); }); });
+    var q = new URLSearchParams(location.search).get('tab');
+    show(ids.indexOf(q) > -1 ? q : 'dinner');
+  }
+});
+</script>
