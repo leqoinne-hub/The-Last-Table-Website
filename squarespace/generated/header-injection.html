@@ -1,0 +1,46 @@
+<!-- The Last Table — Settings → Advanced → Code Injection → Header. Fonts, tonight's hours and the menu tabs.
+     GENERATED from content/ by `npm run build`. Edit the content files, not this file. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Limelight&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..700&family=Jost:wght@400;500;600&display=swap" rel="stylesheet">
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  // Tonight's hours: fills any element with [data-tlt-tonight] (add data-caps for capitals).
+  // Read on Chicago time; until 4 AM it is still last night.
+  var TONIGHT = ["Jazz brunch 9 AM – 3 PM · 4 PM – 2 AM","4 PM – 2 AM","4 PM – 2 AM","4 PM – 2 AM","4 PM – 2 AM","4 PM – 4 AM","4 PM – 4 AM"];
+  var dow = new Date(Date.now() - 4 * 36e5).getDay();
+  try {
+    var wd = new Intl.DateTimeFormat('en-US', { timeZone: 'America/Chicago', weekday: 'short' }).format(new Date(Date.now() - 4 * 36e5));
+    dow = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].indexOf(wd);
+  } catch (e) {}
+  document.querySelectorAll('[data-tlt-tonight]').forEach(function (el) {
+    el.textContent = el.hasAttribute('data-caps') ? TONIGHT[dow].toUpperCase() : TONIGHT[dow];
+  });
+
+  // Menu tabs: .tlt-tabs [role=tab][data-panel] and .tlt-menu-panel[data-panel]. Reads ?tab= on load.
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('.tlt-tabs [role="tab"]'));
+  if (!tabs.length) return;
+  var ids = tabs.map(function (b) { return b.getAttribute('data-panel'); });
+  var show = function (id, focus) {
+    tabs.forEach(function (b) {
+      var on = b.getAttribute('data-panel') === id;
+      b.setAttribute('aria-selected', on ? 'true' : 'false');
+      b.tabIndex = on ? 0 : -1;
+      if (on && focus) b.focus();
+    });
+    document.querySelectorAll('.tlt-menu-panel').forEach(function (p) { p.hidden = p.getAttribute('data-panel') !== id; });
+    try { history.replaceState(null, '', '?tab=' + id); } catch (e) {}
+  };
+  tabs.forEach(function (b, i) {
+    b.addEventListener('click', function () { show(ids[i]); });
+    b.addEventListener('keydown', function (e) {
+      var next = { ArrowRight: i + 1, ArrowLeft: i - 1, Home: 0, End: tabs.length - 1 }[e.key];
+      if (next === undefined) return;
+      e.preventDefault();
+      show(ids[(next + tabs.length) % tabs.length], true);
+    });
+  });
+  var q = new URLSearchParams(location.search).get('tab');
+  if (ids.indexOf(q) > -1) show(q);
+});
+</script>

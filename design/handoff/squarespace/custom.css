@@ -1,0 +1,59 @@
+/* The Last Table — Squarespace 7.1 Custom CSS (starter; adjust selectors to the chosen template) */
+
+:root {
+  --tlt-ink: #14120E; --tlt-ink-deep: #0E0C09; --tlt-card: #1B1813;
+  --tlt-linen: #E3D6BC; --tlt-linen-muted: #C9BFAA;
+  --tlt-forest: #0F2A1E; --tlt-brass: #A88B55; --tlt-cognac: #7A3E1C;
+}
+
+body { background: var(--tlt-ink); color: var(--tlt-linen); font-family: 'Jost', sans-serif; }
+h1, h2, h3, .header-nav-item a, .header-menu-nav-item a { font-family: 'Limelight', serif !important; font-weight: 400 !important; letter-spacing: .02em; }
+h1 { font-size: clamp(40px, 6vw, 72px); line-height: 1.02; }
+h2 { font-size: clamp(30px, 4.4vw, 54px); line-height: 1.08; }
+.tlt-lede, blockquote { font-family: 'Bodoni Moda', serif; font-style: italic; }
+.tlt-kicker { font-family: 'Jost', sans-serif; font-weight: 600; font-size: 12px; letter-spacing: .34em; text-transform: uppercase; color: var(--tlt-brass); }
+a { color: var(--tlt-brass); } a:hover { color: var(--tlt-linen); }
+
+/* Header: sticky, burger at all widths */
+.header { position: sticky; top: 0; background: var(--tlt-ink) !important; border-bottom: 1px solid rgba(168,139,85,.45); }
+.header-display-desktop .header-nav { display: none !important; }
+.header-display-desktop .header-burger { display: flex !important; }
+.header-menu { background: var(--tlt-ink) !important; }
+.header-menu-nav-item a { font-size: 26px !important; color: var(--tlt-linen) !important; }
+.header-menu-nav-item a:hover { color: var(--tlt-brass) !important; }
+
+/* Buttons */
+.sqs-block-button-element, .header-actions-action--cta a {
+  font-family: 'Jost', sans-serif !important; font-weight: 600 !important; font-size: 12px !important; letter-spacing: .3em !important;
+  border-radius: 2px !important; min-height: 44px; transition: background 180ms ease, color 180ms ease, border-color 180ms ease;
+}
+.sqs-block-button-element--medium { background: var(--tlt-brass) !important; color: var(--tlt-ink) !important; }
+.sqs-block-button-element--medium:hover { background: var(--tlt-linen) !important; }
+.sqs-block-button-element--small, .header-actions-action--cta a { background: transparent !important; color: var(--tlt-linen) !important; border: 1px solid var(--tlt-brass) !important; }
+.sqs-block-button-element--small:hover, .header-actions-action--cta a:hover { background: var(--tlt-brass) !important; color: var(--tlt-ink) !important; }
+
+/* Forms & newsletter: bottom-border inputs */
+.form-item input, .form-item textarea, .form-item select, .newsletter-form-field-element {
+  background: transparent !important; border: none !important; border-bottom: 1px solid rgba(227,214,188,.5) !important;
+  color: var(--tlt-linen) !important; font-size: 17px !important; border-radius: 0 !important; padding: 10px 0 !important;
+}
+.form-item input:focus, .form-item textarea:focus { border-bottom-color: var(--tlt-brass) !important; outline: none; }
+.form-item .title, .newsletter-form-field-label { font-size: 11px !important; letter-spacing: .3em !important; text-transform: uppercase; color: var(--tlt-brass) !important; }
+.field-error { color: #D9A27A !important; background: none !important; font-size: 13px !important; }
+
+/* Menus toggle */
+.tlt-tabs { display: inline-flex; border: 1px solid var(--tlt-brass); border-radius: 2px; }
+.tlt-tabs button { background: transparent; color: var(--tlt-linen); border: 0; height: 46px; padding: 0 28px; font: 600 12px/1 'Jost', sans-serif; letter-spacing: .3em; cursor: pointer; }
+.tlt-tabs button[aria-selected="true"] { background: var(--tlt-brass); color: var(--tlt-ink); }
+.tlt-menu-panel[hidden] { display: none; }
+.tlt-item { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 4px 16px; align-items: baseline; margin-bottom: 20px; }
+.tlt-item-name { font: 600 14px/1.35 'Jost', sans-serif; letter-spacing: .14em; text-transform: uppercase; }
+.tlt-item-price { font-size: 14px; color: var(--tlt-brass); }
+.tlt-item-desc { grid-column: 1 / -1; font: italic 17px/1.5 'Bodoni Moda', serif; color: var(--tlt-linen-muted); }
+
+/* Bulb flicker */
+@keyframes tltFlicker { 0%,100%{opacity:1} 41%{opacity:1} 42%{opacity:.25} 43%{opacity:1} 44.5%{opacity:.55} 45.5%{opacity:1} 78%{opacity:1} 78.6%{opacity:.4} 79.2%{opacity:1} }
+@keyframes tltGlow { 0%,100%{opacity:.9} 41%{opacity:.9} 42%{opacity:.15} 43%{opacity:.85} 44.5%{opacity:.35} 45.5%{opacity:.9} 78%{opacity:.9} 78.6%{opacity:.3} 79.2%{opacity:.9} }
+.tlt-mark #filament { animation: tltFlicker 7s infinite; }
+.tlt-mark .tlt-glow { animation: tltGlow 7s infinite; }
+@media (prefers-reduced-motion: reduce) { .tlt-mark #filament, .tlt-mark .tlt-glow { animation: none; } }

@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Limelight&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..700&family=Jost:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    html, body { margin:0; background:#14120E; }
+    a { color:#A88B55; text-decoration:none; } a:hover { color:#E3D6BC; }
+    summary::-webkit-details-marker { display:none; }
+    input, select, textarea, button { font-family:'Jost',sans-serif; }
+    @keyframes tltFlicker { 0%,100%{opacity:1} 41%{opacity:1} 42%{opacity:.25} 43%{opacity:1} 44.5%{opacity:.55} 45.5%{opacity:1} 78%{opacity:1} 78.6%{opacity:.4} 79.2%{opacity:1} }
+    @keyframes tltGlow { 0%,100%{opacity:.9} 41%{opacity:.9} 42%{opacity:.15} 43%{opacity:.85} 44.5%{opacity:.35} 45.5%{opacity:.9} 78%{opacity:.9} 78.6%{opacity:.3} 79.2%{opacity:.9} }
+  </style>
+</helmet>
+
+<div style="font-family:'Jost',sans-serif; background:#14120E; color:#E3D6BC; min-height:100vh;">
+
+  <header data-screen-label="Header" style="position:sticky; top:0; z-index:50; background:#14120E; border-bottom:1px solid rgba(168,139,85,0.45);">
+    <div style="max-width:1320px; margin:0 auto; padding:0 clamp(16px,4vw,40px); height:68px; display:flex; align-items:center; justify-content:space-between; gap:16px;">
+      <button onClick="{{ goHome }}" aria-label="The Last Table — home" style="background:none; border:none; padding:0; cursor:pointer; display:flex; align-items:center; min-height:44px;"><img src="vector/horizontal/tlt-horizontal-linen-transparent.svg" alt="The Last Table" style="height:28px; max-width:52vw; display:block;"></button>
+      <div style="display:flex; align-items:center; gap:clamp(8px,2vw,20px);">
+        <button onClick="{{ goReserve }}" style="background:transparent; color:#E3D6BC; border:1px solid #A88B55; border-radius:2px; padding:0 20px; height:44px; font-size:12px; font-weight:500; letter-spacing:0.3em; cursor:pointer; transition:background 180ms ease, color 180ms ease;" style-hover="background:#A88B55; color:#14120E;">RESERVE</button>
+        <button onClick="{{ openDrawer }}" aria-label="Open navigation" style="background:none; border:none; width:44px; height:44px; cursor:pointer; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px; padding:0;">
+          <span style="width:24px; height:1.5px; background:#E3D6BC;"></span><span style="width:24px; height:1.5px; background:#E3D6BC;"></span><span style="width:16px; height:1.5px; background:#A88B55; align-self:center; margin-left:8px;"></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <sc-if value="{{ drawerOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed; inset:0; z-index:100; display:flex; justify-content:flex-end;">
+      <div onClick="{{ closeDrawer }}" style="position:absolute; inset:0; background:rgba(10,9,7,0.65);"></div>
+      <nav aria-label="Site" style="position:relative; width:min(420px,100%); height:100%; background:#14120E; border-left:1px solid #A88B55; display:flex; flex-direction:column; padding:20px clamp(24px,5vw,40px) 32px; box-sizing:border-box; overflow-y:auto;">
+        <div style="display:flex; justify-content:space-between; align-items:center; height:48px;">
+          <span style="font-size:11px; letter-spacing:0.34em; color:#A88B55;">THE LAST TABLE</span>
+          <button onClick="{{ closeDrawer }}" aria-label="Close navigation" style="background:none; border:none; color:#E3D6BC; font-size:28px; line-height:1; width:44px; height:44px; cursor:pointer;">×</button>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:2px; margin-top:24px;">
+          <sc-for list="{{ navItems }}" as="n" hint-placeholder-count="11">
+            <button onClick="{{ n.go }}" style="background:none; border:none; text-align:left; padding:8px 0; min-height:44px; cursor:pointer; display:flex; align-items:center; gap:12px; font-family:'Limelight',serif; font-size:26px; letter-spacing:0.04em; color:#E3D6BC;" style-hover="color:#A88B55;">
+              <span>{{ n.label }}</span>
+              <sc-if value="{{ n.active }}" hint-placeholder-val="{{ false }}"><span style="width:28px; height:1px; background:#A88B55;"></span></sc-if>
+            </button>
+          </sc-for>
+        </div>
+        <div style="margin-top:auto; padding-top:32px; border-top:1px solid rgba(168,139,85,0.45); font-size:13px; line-height:1.8; color:#C9BFAA;">
+          663 N. State St · Chicago<br>Tonight {{ todayHours }}<br><a href="mailto:info@atthelasttable.com">info@atthelasttable.com</a>
+        </div>
+      </nav>
+    </div>
+  </sc-if>
+
+  <main>
+
+    <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+      <section data-screen-label="Home · Hero" style="background:#14120E; min-height:calc(100vh - 68px); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:clamp(36px,6vh,64px); padding:clamp(64px,10vh,120px) clamp(20px,5vw,56px) 40px; box-sizing:border-box; text-align:center;">
+        <h1 style="margin:0; width:min(900px,100%);">{{ heroMark }}</h1>
+        <sc-if value="{{ isOpen }}" hint-placeholder-val="{{ true }}">
+          <div style="display:flex; flex-wrap:wrap; gap:14px; justify-content:center;">
+            <button onClick="{{ goReserve }}" style="background:#A88B55; color:#14120E; border:1px solid #A88B55; border-radius:2px; height:52px; padding:0 32px; font-size:12px; font-weight:600; letter-spacing:0.3em; cursor:pointer;" style-hover="background:#E3D6BC; border-color:#E3D6BC;">RESERVE A TABLE</button>
+            <button onClick="{{ goMenus }}" style="background:transparent; color:#E3D6BC; border:1px solid rgba(227,214,188,0.5); border-radius:2px; height:52px; padding:0 32px; font-size:12px; font-weight:500; letter-spacing:0.3em; cursor:pointer;" style-hover="border-color:#E3D6BC;">SEE THE MENUS</button>
+          </div>
+        </sc-if>
+        <sc-if value="{{ isComingSoon }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex; flex-direction:column; align-items:center; gap:26px; width:min(600px,100%);">
+            <div style="font-size:12px; font-weight:600; letter-spacing:0.4em; color:#A88B55; padding-left:0.4em;">COMING SOON</div>
+            <div role="timer" aria-label="Countdown to opening" style="display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:clamp(8px,2vw,18px); width:100%;">
+              <sc-for list="{{ countdown }}" as="c" hint-placeholder-count="4">
+                <div style="border:1px solid rgba(168,139,85,0.45); padding:clamp(14px,2.4vw,22px) 4px; display:flex; flex-direction:column; align-items:center; gap:10px;">
+                  <span style="font-family:'Limelight',serif; font-size:clamp(34px,5vw,56px); line-height:1; color:#E3D6BC; font-variant-numeric:tabular-nums;">{{ c.v }}</span>
+                  <span style="font-size:10px; letter-spacing:0.3em; color:#A88B55; padding-left:0.3em;">{{ c.l }}</span>
+                </div>
+              </sc-for>
+            </div>
+            <p style="margin:0; font-family:'Bodoni Moda',serif; font-style:italic; font-size:clamp(22px,2.6vw,30px); line-height:1.35; color:#E3D6BC; text-wrap:pretty;">Doors open to the public November 17 at 4 PM. Join the list for first word.</p>
+            <sc-if value="{{ emailNotDone }}" hint-placeholder-val="{{ true }}">
+              <div style="display:flex; width:100%; border-bottom:1px solid #A88B55;">
+                <input type="email" value="{{ emailVal }}" onChange="{{ onEmail }}" placeholder="Your email" aria-label="Email" style="flex:1; min-width:0; background:transparent; border:none; color:#E3D6BC; font-size:16px; padding:14px 0; outline:none;">
+                <button onClick="{{ joinList }}" style="background:none; border:none; color:#A88B55; font-size:12px; font-weight:600; letter-spacing:0.3em; cursor:pointer; min-height:44px;">JOIN THE LIST</button>
+              </div>
+            </sc-if>
+            <sc-if value="{{ emailErr }}" hint-placeholder-val="{{ false }}"><span style="font-size:13px; color:#D9A27A;">Please add a valid email.</span></sc-if>
+            <sc-if value="{{ emailDone }}" hint-placeholder-val="{{ false }}"><span style="font-family:'Bodoni Moda',serif; font-style:italic; font-size:20px; color:#E3D6BC;">You're on the list. We'll save you a seat.</span></sc-if>
+          </div>
+        </sc-if>
+        <div style="display:flex; align-items:center; gap:14px; font-size:11px; letter-spacing:0.34em; color:#A88B55;">
+          <span style="width:36px; height:1px; background:#A88B55;"></span><span>{{ heroStrip }}</span><span style="width:36px; height:1px; background:#A88B55;"></span>
+        </div>
+      </section>
+
+      <section data-screen-label="Home · Idea" style="background:#E3D6BC; color:#14120E;">
+        <div style="max-width:1200px; margin:0 auto; padding:clamp(72px,10vw,128px) clamp(20px,5vw,56px); display:grid; grid-template-columns:repeat(auto-fit,minmax(min(340px,100%),1fr)); gap:clamp(40px,6vw,88px); align-items:center;">
+          <div>
+            <div style="font-size:12px; font-weight:600; letter-spacing:0.34em; color:#7A3E1C; margin-bottom:22px;">STATE &amp; ERIE · CHICAGO</div>
+            <h2 style="margin:0 0 28px; font-family:'Limelight',serif; font-weight:400; font-size:clamp(34px,4.4vw,54px); line-height:1.08; letter-spacing:0.02em; text-wrap:balance;">The last seating gets the same care as the first.</h2>
+            <p style="margin:0 0 20px; font-family:'Bodoni Moda',serif; font-style:italic; font-size:clamp(19px,1.8vw,23px); line-height:1.55; color:#2A2119; text-wrap:pretty;">Every great Chicago night has a last table — the one still laughing when the chairs go up.</p>
+            <p style="margin:0 0 32px; font-size:17px; line-height:1.8; color:#4A443A; text-wrap:pretty;">We built a supper club around it. Dinner from four, cocktails that run late, a live set when the plates clear, and a room lit low enough that the city outside goes quiet.</p>
+            <button onClick="{{ goStory }}" style="background:none; border:none; border-bottom:1px solid #14120E; padding:6px 0; font-size:12px; font-weight:600; letter-spacing:0.3em; color:#14120E; cursor:pointer;" style-hover="color:#7A3E1C; border-color:#7A3E1C;">READ OUR STORY</button>
+          </div>
+          <div style="aspect-ratio:4 / 5; background:#2A2119; display:flex; align-items:flex-end; padding:20px; box-sizing:border-box;"><span style="font-size:10px; letter-spacing:0.3em; color:#A88B55;">PHOTO · DINING ROOM, LOW LIGHT, FOREST LEATHER</span></div>
+        </div>
+      </section>
+
+      <section data-screen-label="Home · The Evening" style="background:#14120E;">
+        <div style="max-width:1200px; margin:0 auto; padding:clamp(72px,10vw,120px) clamp(20px,5vw,56px);">
+          <div style="font-size:12px; font-weight:600; letter-spacing:0.34em; color:#A88B55; margin-bottom:36px; text-align:center;">THE EVENING</div>
+          <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr)); gap:18px;">
+            <div style="background:#1B1813; border:1px solid rgba(168,139,85,0.35); padding:clamp(28px,4vw,44px); display:flex; flex-direction:column; gap:16px;">
+              <span style="font-size:11px; letter-spacing:0.34em; color:#A88B55;">FROM 4 PM</span>
+              <h3 style="margin:0; font-family:'Limelight',serif; font-weight:400; font-size:32px; letter-spacing:0.03em;">Dinner</h3>
+              <p style="margin:0; font-family:'Bodoni Moda',serif; font-style:italic; font-size:19px; line-height:1.5; color:#C9BFAA; flex:1;">Tartare on brioche, handmade pasta, a dry-aged strip with bone marrow au poivre.</p>
+              <button onClick="{{ goMenusDinner }}" style="align-self:flex-start; background:none; border:none; border-bottom:1px solid #A88B55; padding:6px 0; font-size:12px; font-weight:600; letter-spacing:0.3em; color:#E3D6BC; cursor:pointer;">THE DINNER MENU</button>
+            </div>
+            <div style="background:#0F2A1E; border:1px solid rgba(168,139,85,0.35); padding:clamp(28px,4vw,44px); display:flex; flex-direction:column; gap:16px;">
+              <span style="font-size:11px; letter-spacing:0.34em; color:#A88B55;">LATE INTO THE NIGHT</span>
+              <h3 style="margin:0; font-family:'Limelight',serif; font-weight:400; font-size:32px; letter-spacing:0.03em;">The Bar</h3>
+              <p style="margin:0; font-family:'Bodoni Moda',serif; font-style:italic; font-size:19px; line-height:1.5; color:#C9BFAA; flex:1;">Classics, reimagined for the whole evening — and a final pour that comes in two acts.</p>
+              <button onClick="{{ goMenusAfter }}" style="align-self:flex-start; background:none; border:none; border-bottom:1px solid #A88B55; padding:6px 0; font-size:12px; font-weight:600; letter-spacing:0.3em; color:#E3D6BC; cursor:pointer;">THE BAR MENU</button>
+            </div>
+            <div style="background:#1B1813; border:1px solid rgba(168,139,85,0.35); padding:clamp(28px,4vw,44px); display:flex; flex-direction:column; gap:16px;">
+              <span style="font-size:11px; letter-spacing:0.34em; color:#A88B55;">LATE</span>
+              <h3 style="margin:0; font-family:'Limelight',serif; font-weight:400; font-size:32px; letter-spacing:0.03em;">Live music</h3>
+              <p style="margin:0; font-family:'Bodoni Moda',serif; font-style:italic; font-size:19px; line-height:1.5; color:#C9BFAA; flex:1;">The band starts when dinner winds down. Stay for the set.</p>
+              <button onClick="{{ goMusic }}" style="align-self:flex-start; background:none; border:none; border-bottom:1px solid #A88B55; padding:6px 0; font-size:12px; font-weight:600; letter-spacing:0.3em; color:#E3D6BC; cursor:pointer;">THIS WEEK'S CALENDAR</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section data-screen-label="Home · This Week" style="background:#E3D6BC; color:#14120E;">
+        <div style="max-width:1000px; margin:0 auto; padding:clamp(72px,10vw,120px) clamp(20px,5vw,56px);">
+          <div style="display:flex; flex-wrap:wrap; align-items:flex-end; justify-content:space-between; gap:16px; border-bottom:2px solid #14120E; padding-bottom:18px;">
+            <h2 style="margin:0; font-family:'Limelight',serif; font-weight:400; font-size:clamp(30px,3.6vw,44px); letter-spacing:0.02em;">On stage this week</h2>
+            <button onClick="{{ goMusic }}" style="background:none; border:none; border-bottom:1px solid #14120E; padding:6px 0; font-size:12px; font-weight:600; letter-spacing:0.3em; color:#14120E; cursor:pointer;">FULL CALENDAR</button>
+          </div>
+          <sc-for list="{{ eventsSoon }}" as="ev" hint-placeholder-count="3">
+            <div style="display:grid; grid-template-columns:72px minmax(0,1fr) auto; gap:clamp(16px,3vw,32px); align-items:center; padding:24px 0; border-bottom:1px solid rgba(20,18,14,0.2);">
+              <div style="text-align:center;"><div style="font-family:'Limelight',serif; font-size:34px; line-height:1;">{{ ev.day }}</div><div style="font-size:10px; letter-spacing:0.3em; color:#6B5A3E; margin-top:6px;">{{ ev.mon }}</div></div>
+              <div style="min-width:0;"><div style="font-size:11px; letter-spacing:0.3em; color:#7A3E1C; margin-bottom:6px;">{{ ev.dow }} · {{ ev.time }}</div><div style="font-size:18px; font-weight:500; letter-spacing:0.04em;">{{ ev.title }}</div><div style="font-family:'Bodoni Moda',serif; font-style:italic; font-size:16px; color:#4A443A; margin-top:4px;">{{ ev.who }}</div></div>
+              <button onClick="{{ goReserve }}" style="background:transparent; border:1px solid #14120E; border-radius:2px; height:44px; padding:0 18px; font-size:11px; font-weight:600; letter-spacing:0.28em; color:#14120E; cursor:pointer;" style-hover="background:#14120E; color:#E3D6BC;">RESERVE</button>
+            </div>
+          </sc-for>
+        </div>
+      </section>
+
+      <section data-screen-label="Home · Private Dining" style="background:#0F2A1E;">
+        <div style="max-width:1200px; margin:0 auto; padding:clamp(72px,10vw,120px) clamp(20px,5vw,56px); display:grid; grid-template-columns:repeat(auto-fit,minmax(min(340px,100%),1fr)); gap:clamp(40px,6vw,88px); align-items:center;">
+          <div style="aspect-ratio:3 / 2; background:#14120E; display:flex; align-items:flex-end; padding:20px; box-sizing:border-box; border:1px solid rgba(168,139,85,0.35);"><span style="font-size:10px; letter-spacing:0.3em; color:#A88B55;">PHOTO · PRIVATE TABLE SET FOR TWELVE</span></div>
+          <div>
+            <div style="font-size:12px; font-weight:600; letter-spacing:0.34em; color:#A88B55; margin-bottom:22px;">PRIVATE DINING &amp; EVENTS</div>
+            <h2 style="margin:0 0 24px; font-family:'Limelight',serif; font-weight:400; font-size:clamp(34px,4.4vw,54px); line-height:1.08; letter-spacing:0.02em;">Close the doors.</h2>
+            <p style="margin:0 0 32px; font-family:'Bodoni Moda',serif; font-style:italic; font-size:clamp(19px,1.8vw,23px); line-height:1.55; color:#C9BFAA; text-wrap:pretty;">Birthdays, rehearsal dinners, a quiet buyout on a Tuesday. Tell us the night and we'll build it around you.</p>
+            <button onClick="{{ goPrivate }}" style="background:#A88B55; color:#14120E; border:none; border-radius:2px; height:52px; padding:0 32px; font-size:12px; font-weight:600; letter-spacing:0.3em; cursor:pointer;" style-hover="background:#E3D6BC;">PLAN AN EVENT</button>
+          </div>
+        </div>
+      </section>
+
+      <section data-screen-label="Home · Instagram" style="background:#14120E;">
+        <div style="max-width:1200px; margin:0 auto; padding:clamp(72px,10vw,120px) clamp(20px,5vw,56px);">
+          <div style="display:flex; flex-wrap:wrap; align-items:flex-end; justify-content:space-between; gap:16px; margin-bottom:28px;">
+            <h2 style="margin:0; font-family:'Limelight',serif; font-weight:400; font-size:clamp(28px,3.2vw,40px); letter-spacing:0.02em;">From the room</h2>
+            <a href="https://instagram.com/thelasttablechicago" style="font-size:12px; font-weight:600; letter-spacing:0.3em; border-bottom:1px solid #A88B55; padding:6px 0;">@THELASTTABLECHICAGO</a>
+          </div>
+          <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(min(170px,46%),1fr)); gap:10px;">
+            <sc-for list="{{ igTiles }}" as="t" hint-placeholder-count="6">
+              <div style="aspect-ratio:1; background:#1B1813; border:1px solid rgba(168,139,85,0.25); display:flex; align-items:flex-end; padding:12px; box-sizing:border-box;"><span style="font-size:9px; letter-spacing:0.28em; color:#6B5A3E;">{{ t }}</span></div>
+            </sc-for>
+          </div>
+        </div>
+      </section>
+    </sc-if>
+
+    <sc-if value="{{ isMenus }}" hint-placeholder-val="{{ false }}">
+      <section data-screen-label="Menus" style="background:#14120E;">
+        <div style="max-width:1200px; margin:0 auto; padding:clamp(64px,9vw,112px) clamp(20px,5vw,56px) 40px; border-bottom:1px solid rgba(168,139,85,0.45);">
+          <div style="font-size:12px; font-weight:600; letter-spacing:0.34em; color:#A88B55; margin-bottom:18px;">MENUS</div>
+          <h1 style="margin:0 0 20px; font-family:'Limelight',serif; font-weight:400; font-size:clamp(40px,6vw,72px); line-height:1.02; letter-spacing:0.02em;">Dinner, then the bar.</h1>
+          <p style="margin:0 0 36px; font-family:'Bodoni Moda',serif; font-style:italic; font-size:clamp(19px,2vw,24px); line-height:1.5; color:#C9BFAA; max-width:640px;">Dinner from four. When the plates clear, the room belongs to the bar and the band.</p>
+          <div role="tablist" style="display:inline-flex; border:1px solid #A88B55; border-radius:2px;">
+            <button role="tab" onClick="{{ tabDinner }}" style="background:{{ tabDinnerBg }}; color:{{ tabDinnerFg }}; border:none; height:46px; padding:0 22px; font-size:12px; font-weight:600; letter-spacing:0.3em; cursor:pointer;">DINNER</button>
+            <button role="tab" onClick="{{ tabAfter }}" style="background:{{ tabAfterBg }}; color:{{ tabAfterFg }}; border:none; height:46px; padding:0 22px; font-size:12px; font-weight:600; letter-spacing:0.3em; cursor:pointer;">BAR</button>
+            <button role="tab" onClick="{{ tabBrunch }}" style="background:{{ tabBrunchBg }}; color:{{ tabBrunchFg }}; border:none; height:46px; padding:0 22px; font-size:12px; font-weight:600; letter-spacing:0.3em; cursor:pointer;">BRUNCH</button>
+          </div>
+        </div>
+        <div style="max-width:1200px; margin:0 auto; padding:48px clamp(20px,5vw,56px) clamp(72px,10vw,120px); display:flex; flex-direction:column; gap:72px;">
+          <sc-for list="{{ menuGroups }}" as="g" hint-placeholder-count="2">
+            <div>
+              <sc-if value="{{ g.showHead }}" hint-placeholder-val="{{ false }}">
+                <div style="margin-bottom:32px;"><div style="font-size:11px; letter-spacing:0.34em; color:#A88B55; margin-bottom:10px;">{{ g.kicker }}</div><div style="font-family:'Bodoni Moda',serif; font-style:italic; font-size:22px; color:#E3D6BC;">{{ g.title }}</div></div>
+              </sc-if>
+              <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(min(320px,100%),1fr)); gap:48px clamp(32px,5vw,72px);">
+                <sc-for list="{{ g.sections }}" as="s" hint-placeholder-count="4">
+                  <div>
+                    <sc-if value="{{ s.hasHead }}" hint-placeholder-val="{{ true }}">
+                      <div style="display:flex; align-items:center; gap:14px; margin-bottom:22px;"><h3 style="margin:0; font-family:'Limelight',serif; font-weight:400; font-size:24px; letter-spacing:0.04em; white-space:nowrap;">{{ s.head }}</h3><span style="flex:1; height:1px; background:rgba(168,139,85,0.6);"></span></div>
+                    </sc-if>
+                    <div style="display:flex; flex-direction:column; gap:20px;">
+                      <sc-for list="{{ s.items }}" as="it" hint-placeholder-count="4">
+                        <div style="display:grid; grid-template-columns:minmax(0,1fr) auto; gap:4px 16px; align-items:baseline;">
+                          <div style="font-size:14px; font-weight:600; letter-spacing:0.14em; text-transform:uppercase; line-height:1.35;">{{ it.name }}</div>
+                          <div style="font-size:14px; letter-spacing:0.06em; color:#A88B55;">{{ it.price }}</div>
+                          <sc-if value="{{ it.hasDesc }}" hint-placeholder-val="{{ true }}"><div style="grid-column:1 / -1; font-family:'Bodoni Moda',serif; font-style:italic; font-size:17px; line-height:1.5; color:#C9BFAA; text-wrap:pretty;">{{ it.desc }}</div></sc-if>
+                        </div>
+                      </sc-for>
+                    </div>
+                    <sc-if value="{{ s.hasNote }}" hint-placeholder-val="{{ false }}"><p style="margin:16px 0 0; font-size:13px; line-height:1.6; color:#8E846F;">{{ s.note }}</p></sc-if>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </sc-for>
+          <div style="border-top:1px solid rgba(168,139,85,0.45); padding-top:24px; display:flex; flex-wrap:wrap; gap:16px 32px; justify-content:space-between; font-size:13px; line-height:1.6; color:#8E846F;">
+            <span>Please tell your captain about any allergies. Menus change with the season.</span>
+            <span style="display:flex; gap:24px;"><a href="TLT Dinner Menu-print.dc.html" style="letter-spacing:0.2em; font-size:12px;">DINNER PDF</a><a href="TLT Bar Menu-print.dc.html" style="letter-spacing:0.2em; font-size:12px;">BAR PDF</a></span>
+          </div>
+        </div>
+      </section>
+    </sc-if>
+
+    <sc-if value="{{ isReserve }}" hint-placeholder-val="{{ false }}">
+      <section data-screen-label="Reservations" style="background:#14120E;">
+        <div style="max-width:1200px; margin:0 auto; padding:clamp(64px,9vw,112px) clamp(20px,5vw,56px) 40px; border-bottom:1px solid rgba(168,139,85,0.45);">
+          <div style="font-size:12px; font-weight:600; letter-spacing:0.34em; color:#A88B55; margin-bottom:18px;">RESERVATIONS</div>
+          <h1 style="margin:0 0 20px; font-family:'Limelight',serif; font-weight:400; font-size:clamp(40px,6vw,72px); line-height:1.02; letter-spacing:0.02em;">Hold a table.</h1>
+          <p style="margin:0; font-family:'Bodoni Moda',serif; font-style:italic; font-size:clamp(19px,2vw,24px); line-height:1.5; color:#C9BFAA; max-width:640px;">Book through Resy. The bar is always first come, first served.</p>
+        </div>
+        <div style="max-width:1200px; margin:0 auto; padding:48px clamp(20px,5vw,56px) clamp(72px,10vw,120px); display:grid; grid-template-columns:repeat(auto-fit,minmax(min(340px,100%),1fr)); gap:clamp(32px,5vw,64px); align-items:start;">
+          <div style="min-height:440px; border:1px dashed #A88B55; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:18px; padding:32px; box-sizing:border-box; text-align:center;">
+            <span style="font-size:11px; letter-spacing:0.34em; color:#A88B55;">RESY WIDGET EMBEDS HERE</span>
+            <span style="font-family:'Bodoni Moda',serif; font-style:italic; font-size:18px; color:#C9BFAA; max-width:320px;">Party size, date and time picker — Resy venue ID to be supplied.</span>
+            <a href="https://resy.com" style="background:#A88B55; color:#14120E; border-radius:2px; height:52px; padding:0 32px; display:flex; align-items:center; font-size:12px; font-weight:600; letter-spacing:0.3em;">FIND A TABLE ON RESY</a>
+          </div>
+          <div style="display:flex; flex-direction:column; gap:28px;">
+            <div style="border-bottom:1px solid rgba(168,139,85,0.35); padding-bottom:24px;"><div style="font-size:11px; letter-spacing:0.34em; color:#A88B55; margin-bottom:10px;">WALK-INS</div><p style="margin:0; font-size:17px; line-height:1.75; color:#C9BFAA;">The bar is held for walk-ins every night.</p></div>
+            <div style="border-bottom:1px solid rgba(168,139,85,0.35); padding-bottom:24px;"><div style="font-size:11px; letter-spacing:0.34em; color:#A88B55; margin-bottom:10px;">LARGER PARTIES</div><p style="margin:0; font-size:17px; line-height:1.75; color:#C9BFAA;">Online booking is for parties of up to six. For seven or more, or a full buyout, tell us about the night on our <button onClick="{{ goPrivate }}" style="background:none; border:none; padding:0; color:#E3D6BC; font-size:17px; border-bottom:1px solid #A88B55; cursor:pointer;">private dining</button> page.</p></div>
+            <div style="border-bottom:1px solid rgba(168,139,85,0.35); padding-bottom:24px;"><div style="font-size:11px; letter-spacing:0.34em; color:#A88B55; margin-bottom:10px;">BOOKING POLICY</div><p style="margin:0; font-size:17px; line-height:1.75; color:#C9BFAA;">Tables open on Resy 30 days ahead. We hold your table for 15 minutes. Please cancel at least 24 hours ahead; late cancellations and no-shows may be charged $25 per guest. Fully booked? Join Resy Notify and we'll let you know when a table opens.</p></div>
+            <div><div style="font-size:11px; letter-spacing:0.34em; color:#A88B55; margin-bottom:10px;">HOURS</div>
+              <sc-for list="{{ hoursRows }}" as="h" hint-placeholder-count="3">
+                <div style="display:flex; flex-wrap:wrap; justify-content:space-between; gap:4px 16px; padding:8px 0; font-size:16px; line-height:1.6;"><span style="color:#E3D6BC;">{{ h.days }}</span><span style="color:#C9BFAA;">{{ h.time }}</span></div>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+      </section>
+    </sc-if>
+
+    <sc-if value="{{ isPrivate }}" hint-placeholder-val="{{ false }}">
+      <section data-screen-label="Private Dining" style="background:#0F2A1E;">
+        <div style="max-width:1200px; margin:0 auto; padding:clamp(64px,9vw,112px) clamp(20px,5vw,56px) 40px; border-bottom:1px solid rgba(168,139,85,0.45);">
+          <div style="font-size:12px; font-weight:600; letter-spacing:0.34em; color:#A88B55; margin-bottom:18px;">PRIVATE DINING &amp; EVENTS</div>
+          <h1 style="margin:0 0 20px; font-family:'Limelight',serif; font-weight:400; font-size:clamp(40px,6vw,72px); line-height:1.02; letter-spacing:0.02em;">Close the doors.</h1>
+          <p style="margin:0; font-family:'Bodoni Moda',serif; font-style:italic; font-size:clamp(19px,2vw,24px); line-height:1.5; color:#C9BFAA; max-width:680px;">Rehearsal dinners, birthdays, a client dinner, a quiet buyout on a Tuesday. Tell us the night and we'll build it around you.</p>
+        </div>
+        <div style="max-width:1200px; margin:0 auto; padding:48px clamp(20px,5vw,56px) clamp(72px,10vw,120px); display:grid; grid-template-columns:repeat(auto-fit,minmax(min(360px,100%),1fr)); gap:clamp(40px,6vw,80px); align-items:start;">
+          <div style="display:flex; flex-direction:column; gap:24px;">
+            <div style="aspect-ratio:4 / 3; background:#14120E; display:flex; align-items:flex-end; padding:20px; box-sizing:border-box; border:1px solid rgba(168,139,85,0.35);"><span style="font-size:10px; letter-spacing:0.3em; color:#A88B55;">PHOTO · PRIVATE ROOM OR BUYOUT SETUP</span></div>
+            <p style="margin:0; font-size:17px; line-height:1.8; color:#C9BFAA;">Every event starts with a conversation. Our events team will follow up within two business days with menus, pricing and availability.</p>
+            <div style="display:flex; flex-direction:column; border-top:1px solid rgba(168,139,85,0.45);">
+              <div style="display:flex; flex-direction:column; gap:6px; padding:18px 0; border-bottom:1px solid rgba(168,139,85,0.3);"><div style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:baseline; gap:6px 16px;"><span style="font-family:'Limelight',serif; font-size:22px; letter-spacing:0.03em; color:#E3D6BC;">Full buyout</span><span style="font-size:11px; letter-spacing:0.3em; color:#A88B55;">SEATED [—] · STANDING [—]</span></div><span style="font-family:'Bodoni Moda',serif; font-style:italic; font-size:17px; line-height:1.5; color:#C9BFAA;">The whole room, the bar and the stage. Your menu, your music, your night.</span></div>
+              <div style="display:flex; flex-direction:column; gap:6px; padding:18px 0; border-bottom:1px solid rgba(168,139,85,0.3);"><div style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:baseline; gap:6px 16px;"><span style="font-family:'Limelight',serif; font-size:22px; letter-spacing:0.03em; color:#E3D6BC;">Semi-private dining</span><span style="font-size:11px; letter-spacing:0.3em; color:#A88B55;">SEATED [—]</span></div><span style="font-family:'Bodoni Moda',serif; font-style:italic; font-size:17px; line-height:1.5; color:#C9BFAA;">A section of the dining room set apart for one long table.</span></div>
+              <div style="display:flex; flex-direction:column; gap:6px; padding:18px 0; border-bottom:1px solid rgba(168,139,85,0.3);"><div style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:baseline; gap:6px 16px;"><span style="font-family:'Limelight',serif; font-size:22px; letter-spacing:0.03em; color:#E3D6BC;">After-ten reception</span><span style="font-size:11px; letter-spacing:0.3em; color:#A88B55;">STANDING [—]</span></div><span style="font-family:'Bodoni Moda',serif; font-style:italic; font-size:17px; line-height:1.5; color:#C9BFAA;">Cocktails, passed bites and the late set, from ten until close.</span></div>
+            </div>
+            <a href="#events-packet" style="align-self:flex-start; border:1px solid #A88B55; border-radius:2px; height:48px; padding:0 24px; display:flex; align-items:center; font-size:12px; font-weight:600; letter-spacing:0.3em; color:#E3D6BC;">DOWNLOAD THE EVENTS PACKET</a>
+          </div>
+          <div>
+            <sc-if value="{{ notSent }}" hint-placeholder-val="{{ true }}">
+              <div style="display:flex; flex-direction:column; gap:22px;">
+                <label style="display:flex; flex-direction:column; gap:6px;"><span style="font-size:11px; letter-spacing:0.3em; color:#A88B55;">NAME</span><input value="{{ form.name }}" onChange="{{ onName }}" autocomplete="name" style="background:transparent; border:none; border-bottom:1px solid rgba(227,214,188,0.5); color:#E3D6BC; font-size:17px; padding:10px 0; outline:none;" style-focus="border-bottom-color:#A88B55;"><sc-if value="{{ errName }}" hint-placeholder-val="{{ false }}"><span style="font-size:13px; color:#D9A27A;">Please add your name.</span></sc-if></label>
+                <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(min(200px,100%),1fr)); gap:22px;">
+                  <label style="display:flex; flex-direction:column; gap:6px;"><span style="font-size:11px; letter-spacing:0.3em; color:#A88B55;">EMAIL</span><input type="email" value="{{ form.email }}" onChange="{{ onFormEmail }}" autocomplete="email" style="background:transparent; border:none; border-bottom:1px solid rgba(227,214,188,0.5); color:#E3D6BC; font-size:17px; padding:10px 0; outline:none;" style-focus="border-bottom-color:#A88B55;"><sc-if value="{{ errEmail }}" hint-placeholder-val="{{ false }}"><span style="font-size:13px; color:#D9A27A;">Please add a valid email.</span></sc-if></label>
+                  <label style="display:flex; flex-direction:column; gap:6px;"><span style="font-size:11px; letter-spacing:0.3em; color:#A88B55;">PHONE (OPTIONAL)</span><input type="tel" value="{{ form.phone }}" onChange="{{ onPhone }}" autocomplete="tel" style="background:transparent; border:none; border-bottom:1px solid rgba(227,214,188,0.5); color:#E3D6BC; font-size:17px; padding:10px 0; outline:none;" style-focus="border-bottom-color:#A88B55;"></label>
+                </div>
+                <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(min(200px,100%),1fr)); gap:22px;">
+                  <label style="display:flex; flex-direction:column; gap:6px;"><span style="font-size:11px; letter-spacing:0.3em; color:#A88B55;">PREFERRED DATE</span><input type="date" value="{{ form.date }}" onChange="{{ onDate }}" style="background:transparent; border:none; border-bottom:1px solid rgba(227,214,188,0.5); color:#E3D6BC; font-size:17px; padding:10px 0; outline:none; color-scheme:dark;" style-focus="border-bottom-color:#A88B55;"><sc-if value="{{ errDate }}" hint-placeholder-val="{{ false }}"><span style="font-size:13px; color:#D9A27A;">Pick a date — approximate is fine.</span></sc-if></label>
+                  <label style="display:flex; flex-direction:column; gap:6px;"><span style="font-size:11px; letter-spacing:0.3em; color:#A88B55;">GUESTS</span><input type="number" min="1" value="{{ form.guests }}" onChange="{{ onGuests }}" style="background:transparent; border:none; border-bottom:1px solid rgba(227,214,188,0.5); color:#E3D6BC; font-size:17px; padding:10px 0; outline:none;" style-focus="border-bottom-color:#A88B55;"><sc-if value="{{ errGuests }}" hint-placeholder-val="{{ false }}"><span style="font-size:13px; color:#D9A27A;">How many guests?</span></sc-if></label>
+                </div>
+                <label style="display:flex; flex-direction:column; gap:6px;"><span style="font-size:11px; letter-spacing:0.3em; color:#A88B55;">OCCASION</span>
+                  <select value="{{ form.type }}" onChange="{{ onType }}" style="background:#0F2A1E; border:none; border-bottom:1px solid rgba(227,214,188,0.5); color:#E3D6BC; font-size:17px; padding:10px 0; outline:none;">
+                    <sc-for list="{{ eventTypes }}" as="t" hint-placeholder-count="6"><option value="{{ t }}">{{ t }}</option></sc-for>
+                  </select>
+                </label>
+                <label style="display:flex; flex-direction:column; gap:6px;"><span style="font-size:11px; letter-spacing:0.3em; color:#A88B55;">TELL US ABOUT THE NIGHT</span><textarea rows="4" value="{{ form.notes }}" onChange="{{ onNotes }}" style="background:transparent; border:none; border-bottom:1px solid rgba(227,214,188,0.5); color:#E3D6BC; font-size:17px; line-height:1.6; padding:10px 0; outline:none; resize:vertical;" style-focus="border-bottom-color:#A88B55;"></textarea></label>
+                <button onClick="{{ submitInquiry }}" style="align-self:flex-start; background:#A88B55; color:#14120E; border:none; border-radius:2px; height:52px; padding:0 32px; font-size:12px; font-weight:600; letter-spacing:0.3em; cursor:pointer;" style-hover="background:#E3D6BC;">SEND INQUIRY</button>
+              </div>
+            </sc-if>
+            <sc-if value="{{ sent }}" hint-placeholder-val="{{ false }}">
+              <div style="border:1px solid #A88B55; padding:clamp(28px,4vw,48px); display:flex; flex-direction:column; gap:16px;">
+                <span style="font-size:11px; letter-spacing:0.34em; color:#A88B55;">INQUIRY RECEIVED</span>
+                <span style="font-family:'Limelight',serif; font-size:32px; letter-spacing:0.02em;">Thank you, {{ form.name }}.</span>
+                <span style="font-family:'Bodoni Moda',serif; font-style:italic; font-size:19px; line-height:1.5; color:#C9BFAA;">We'll be in touch within two business days. Questions in the meantime: info@atthelasttable.com.</span>
+              </div>
+            </sc-if>
+          </div>
+        </div>
+      </section>
+    </sc-if>
+
+    <sc-if value="{{ isMusic }}" hint-placeholder-val="{{ false }}">
+      <section data-screen-label="Live Music" style="background:#14120E;">
+        <div style="max-width:1100px; margin:0 auto; padding:clamp(64px,9vw,112px) clamp(20px,5vw,56px) 40px; border-bottom:1px solid rgba(168,139,85,0.45);">
+          <div style="font-size:12px; font-weight:600; letter-spacing:0.34em; color:#A88B55; margin-bottom:18px;">LIVE MUSIC</div>
+          <h1 style="margin:0 0 20px; font-family:'Limelight',serif; font-weight:400; font-size:clamp(40px,6vw,72px); line-height:1.02; letter-spacing:0.02em;">Stay for the set.</h1>
+          <p style="margin:0; font-family:'Bodoni Moda',serif; font-style:italic; font-size:clamp(19px,2vw,24px); line-height:1.5; color:#C9BFAA; max-width:640px;">The band starts when dinner winds down. No cover for dinner guests.</p>
+        </div>
+        <div style="max-width:1100px; margin:0 auto; padding:24px clamp(20px,5vw,56px) clamp(72px,10vw,120px);">
+          <sc-for list="{{ events }}" as="ev" hint-placeholder-count="6">
+            <div style="display:grid; grid-template-columns:80px minmax(0,1fr) auto; gap:clamp(16px,3vw,40px); align-items:center; padding:28px 0; border-bottom:1px solid rgba(168,139,85,0.3);">
+              <div style="text-align:center;"><div style="font-family:'Limelight',serif; font-size:40px; line-height:1;">{{ ev.day }}</div><div style="font-size:10px; letter-spacing:0.3em; color:#A88B55; margin-top:6px;">{{ ev.mon }}</div></div>
+              <div style="min-width:0;"><div style="font-size:11px; letter-spacing:0.3em; color:#A88B55; margin-bottom:8px;">{{ ev.dow }} · {{ ev.time }}</div><div style="font-size:20px; font-weight:500; letter-spacing:0.04em;">{{ ev.title }}</div><div style="font-family:'Bodoni Moda',serif; font-style:italic; font-size:17px; color:#C9BFAA; margin-top:4px;">{{ ev.who }}</div></div>
+              <button onClick="{{ goReserve }}" style="background:transparent; border:1px solid #A88B55; border-radius:2px; height:44px; padding:0 18px; font-size:11px; font-weight:600; letter-spacing:0.28em; color:#E3D6BC; cursor:pointer;" style-hover="background:#A88B55; color:#14120E;">RESERVE</button>
+            </div>
+          </sc-for>
+        </div>
+      </section>
+    </sc-if>
+
+    <sc-if value="{{ isStory }}" hint-placeholder-val="{{ false }}">
+      <section data-screen-label="Our Story" style="background:#E3D6BC; color:#14120E;">
+        <div style="max-width:760px; margin:0 auto; padding:clamp(64px,9vw,112px) clamp(20px,5vw,40px) clamp(72px,10vw,120px);">
+          <div style="font-size:12px; font-weight:600; letter-spacing:0.34em; color:#7A3E1C; margin-bottom:18px; text-align:center;">OUR STORY</div>
+          <h1 style="margin:0 0 40px; font-family:'Limelight',serif; font-weight:400; font-size:clamp(40px,6vw,68px); line-height:1.04; letter-spacing:0.02em; text-align:center; text-wrap:balance;">One light still on.</h1>
+          <p style="margin:0 0 40px; font-family:'Bodoni Moda',serif; font-style:italic; font-size:clamp(21px,2.4vw,28px); line-height:1.5; text-align:center; color:#2A2119; text-wrap:pretty;">Every great Chicago night has a last table. It's the one the captain holds for the regulars, the one still laughing when the chairs go up.</p>
+          <div style="aspect-ratio:16 / 9; background:#2A2119; display:flex; align-items:flex-end; padding:20px; box-sizing:border-box; margin:0 0 40px;"><span style="font-size:10px; letter-spacing:0.3em; color:#A88B55;">PHOTO · THE ROOM FROM THE BAR, BRASS AND MARBLE</span></div>
+          <p style="margin:0 0 24px; font-size:18px; line-height:1.85; color:#2A2119; text-wrap:pretty;">We built a room for that table at State &amp; Erie: forest-green leather and cognac, blackened millwork, black marble and brass, lit low enough that the city outside goes quiet. Dinner runs into cocktails, cocktails run into a live set, and nobody's checking the time.</p>
+          <p style="margin:0 0 24px; font-size:18px; line-height:1.85; color:#2A2119; text-wrap:pretty;">The idea is simple. The last seating of the night gets the same care as the first — the same pour, the same plate, the same welcome at one in the morning as at four in the afternoon.</p>
+          <p style="margin:0 0 48px; font-size:18px; line-height:1.85; color:#2A2119; text-wrap:pretty;">The Last Table is part of L&amp;A Core Hospitality, a Chicago group that believes hospitality is a craft, not a performance. Pull up a chair. Stay for one more.</p>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:10px; border-top:1px solid #A88B55; padding-top:28px;">
+            <span style="font-family:'Bodoni Moda',serif; font-style:italic; font-size:22px;">LeQoinne Rice</span>
+            <span style="font-size:11px; letter-spacing:0.34em; color:#6B5A3E;">CO-FOUNDER</span>
+          </div>
+        </div>
+      </section>
+    </sc-if>
+
+    <sc-if value="{{ isGift }}" hint-placeholder-val="{{ false }}">
+      <section data-screen-label="Gift Cards" style="background:#14120E;">
+        <div style="max-width:1200px; margin:0 auto; padding:clamp(64px,9vw,112px) clamp(20px,5vw,56px) clamp(72px,10vw,120px); display:grid; grid-template-columns:repeat(auto-fit,minmax(min(340px,100%),1fr)); gap:clamp(40px,6vw,88px); align-items:center;">
+          <div style="display:flex; justify-content:center;">
+            <div style="width:min(440px,100%); aspect-ratio:1.586; background:#14120E; border:1px solid #A88B55; border-radius:14px; box-shadow:0 30px 60px rgba(0,0,0,0.6); display:flex; flex-direction:column; justify-content:space-between; padding:clamp(22px,4vw,34px); box-sizing:border-box;">
+              <img src="vector/one-color/tlt-onecolor-linen.svg" alt="The Last Table" style="width:62%; display:block;">
+              <div style="display:flex; justify-content:space-between; align-items:flex-end; gap:12px;"><span style="font-size:10px; letter-spacing:0.36em; color:#A88B55;">A NIGHT AT THE LAST TABLE</span>{{ cardBulb }}</div>
+            </div>
+          </div>
+          <div>
+            <div style="font-size:12px; font-weight:600; letter-spacing:0.34em; color:#A88B55; margin-bottom:18px;">GIFT CARDS</div>
+            <h1 style="margin:0 0 20px; font-family:'Limelight',serif; font-weight:400; font-size:clamp(40px,6vw,68px); line-height:1.02; letter-spacing:0.02em;">Give someone the last table.</h1>
+            <p style="margin:0 0 32px; font-family:'Bodoni Moda',serif; font-style:italic; font-size:clamp(19px,2vw,24px); line-height:1.5; color:#C9BFAA;">Digital or physical, any amount. Good for dinner, drinks and the late set.</p>
+            <div style="display:flex; flex-wrap:wrap; gap:14px;">
+              <a href="https://www.toasttab.com" style="background:#A88B55; color:#14120E; border-radius:2px; height:52px; padding:0 32px; display:flex; align-items:center; font-size:12px; font-weight:600; letter-spacing:0.3em;">BUY ON TOAST</a>
+              <a href="https://www.toasttab.com" style="border:1px solid rgba(227,214,188,0.5); color:#E3D6BC; border-radius:2px; height:52px; padding:0 28px; display:flex; align-items:center; font-size:12px; font-weight:500; letter-spacing:0.3em;">CHECK A BALANCE</a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </sc-if>
+
+    <sc-if value="{{ isPress }}" hint-placeholder-val="{{ false }}">
+      <section data-screen-label="Press" style="background:#E3D6BC; color:#14120E;">
+        <div style="max-width:1200px; margin:0 auto; padding:clamp(64px,9vw,112px) clamp(20px,5vw,56px) 40px; border-bottom:2px solid #14120E;">
+          <div style="font-size:12px; font-weight:600; letter-spacing:0.34em; color:#7A3E1C; margin-bottom:18px;">PRESS</div>
+          <h1 style="margin:0 0 20px; font-family:'Limelight',serif; font-weight:400; font-size:clamp(40px,6vw,72px); line-height:1.02; letter-spacing:0.02em;">For the press.</h1>
+          <p style="margin:0; font-family:'Bodoni Moda',serif; font-style:italic; font-size:clamp(19px,2vw,24px); line-height:1.5; color:#4A443A; max-width:640px;">Logos, menus and the facts. For interviews and visits, write to us.</p>
+        </div>
+        <div style="max-width:1200px; margin:0 auto; padding:48px clamp(20px,5vw,56px) clamp(72px,10vw,120px); display:grid; grid-template-columns:repeat(auto-fit,minmax(min(340px,100%),1fr)); gap:clamp(32px,5vw,64px); align-items:start;">
+          <div>
+            <h2 style="margin:0 0 20px; font-family:'Limelight',serif; font-weight:400; font-size:26px; letter-spacing:0.03em;">Press kit</h2>
+            <sc-for list="{{ pressKit }}" as="k" hint-placeholder-count="4">
+              <a href="{{ k.href }}" style="display:flex; justify-content:space-between; align-items:center; gap:16px; padding:18px 0; border-bottom:1px solid rgba(20,18,14,0.2); color:#14120E; min-height:44px;"><span style="font-size:17px;">{{ k.label }}</span><span style="font-size:11px; letter-spacing:0.3em; color:#7A3E1C;">{{ k.kind }}</span></a>
+            </sc-for>
+          </div>
+          <div>
+            <h2 style="margin:0 0 20px; font-family:'Limelight',serif; font-weight:400; font-size:26px; letter-spacing:0.03em;">Fact sheet</h2>
+            <sc-for list="{{ facts }}" as="f" hint-placeholder-count="6">
+              <div style="display:grid; grid-template-columns:140px minmax(0,1fr); gap:16px; padding:14px 0; border-bottom:1px solid rgba(20,18,14,0.2); font-size:16px; line-height:1.6;"><span style="font-size:11px; letter-spacing:0.3em; color:#6B5A3E; padding-top:3px;">{{ f.k }}</span><span>{{ f.v }}</span></div>
+            </sc-for>
+          </div>
+        </div>
+      </section>
+    </sc-if>
+
+    <sc-if value="{{ isCareers }}" hint-placeholder-val="{{ false }}">
+      <section data-screen-label="Careers" style="background:#14120E;">
+        <div style="max-width:1100px; margin:0 auto; padding:clamp(64px,9vw,112px) clamp(20px,5vw,56px) 40px; border-bottom:1px solid rgba(168,139,85,0.45);">
+          <div style="font-size:12px; font-weight:600; letter-spacing:0.34em; color:#A88B55; margin-bottom:18px;">CAREERS</div>
+          <h1 style="margin:0 0 20px; font-family:'Limelight',serif; font-weight:400; font-size:clamp(40px,6vw,72px); line-height:1.02; letter-spacing:0.02em;">Join the opening team.</h1>
+          <p style="margin:0; font-family:'Bodoni Moda',serif; font-style:italic; font-size:clamp(19px,2vw,24px); line-height:1.5; color:#C9BFAA; max-width:680px;">We train people to take care of people. If that's how you like to work, we'd like to meet you.</p>
+        </div>
+        <div style="max-width:1100px; margin:0 auto; padding:24px clamp(20px,5vw,56px) clamp(72px,10vw,120px);">
+          <sc-for list="{{ roles }}" as="r" hint-placeholder-count="6">
+            <div style="display:grid; grid-template-columns:minmax(0,1fr) auto; gap:16px 32px; align-items:center; padding:26px 0; border-bottom:1px solid rgba(168,139,85,0.3);">
+              <div><div style="font-size:20px; font-weight:500; letter-spacing:0.04em;">{{ r.title }}</div><div style="font-size:11px; letter-spacing:0.3em; color:#A88B55; margin-top:8px;">{{ r.meta }}</div></div>
+              <a href="{{ r.href }}" style="border:1px solid #A88B55; border-radius:2px; height:44px; padding:0 20px; display:flex; align-items:center; font-size:11px; font-weight:600; letter-spacing:0.28em; color:#E3D6BC;">APPLY</a>
+            </div>
+          </sc-for>
+        </div>
+      </section>
+    </sc-if>
+
+    <sc-if value="{{ isContact }}" hint-placeholder-val="{{ false }}">
+      <section data-screen-label="Hours & Contact" style="background:#14120E;">
+        <div style="max-width:1200px; margin:0 auto; padding:clamp(64px,9vw,112px) clamp(20px,5vw,56px) 40px; border-bottom:1px solid rgba(168,139,85,0.45);">
+          <div style="font-size:12px; font-weight:600; letter-spacing:0.34em; color:#A88B55; margin-bottom:18px;">HOURS &amp; CONTACT</div>
+          <h1 style="margin:0; font-family:'Limelight',serif; font-weight:400; font-size:clamp(40px,6vw,72px); line-height:1.02; letter-spacing:0.02em;">663 N. State Street.</h1>
+        </div>
+        <div style="max-width:1200px; margin:0 auto; padding:48px clamp(20px,5vw,56px) clamp(72px,10vw,120px); display:grid; grid-template-columns:repeat(auto-fit,minmax(min(320px,100%),1fr)); gap:clamp(32px,5vw,64px); align-items:start;">
+          <div style="display:flex; flex-direction:column; gap:36px;">
+            <div><div style="font-size:11px; letter-spacing:0.34em; color:#A88B55; margin-bottom:12px;">HOURS</div>
+              <sc-for list="{{ hoursRows }}" as="h" hint-placeholder-count="3">
+                <div style="display:flex; flex-wrap:wrap; justify-content:space-between; gap:4px 16px; padding:12px 0; border-bottom:1px solid rgba(168,139,85,0.25); font-size:17px; line-height:1.6;"><span>{{ h.days }}</span><span style="color:#C9BFAA;">{{ h.time }}</span></div>
+              </sc-for>
+            </div>
+            <div><div style="font-size:11px; letter-spacing:0.34em; color:#A88B55; margin-bottom:12px;">GETTING HERE</div><p style="margin:0; font-size:17px; line-height:1.8; color:#C9BFAA;">663 N. State St, Chicago, at the corner of State &amp; Erie. Valet and parking details coming soon. The nearest L stop is Grand on the Red Line, two blocks south.</p></div>
+            <div><div style="font-size:11px; letter-spacing:0.34em; color:#A88B55; margin-bottom:12px;">CALL</div><p style="margin:0; font-size:17px; line-height:1.8;"><a href="tel:">Phone line to come</a></p></div>
+            <div><div style="font-size:11px; letter-spacing:0.34em; color:#A88B55; margin-bottom:12px;">WRITE TO US</div><p style="margin:0; font-size:17px; line-height:1.8;"><a href="mailto:info@atthelasttable.com">info@atthelasttable.com</a><br><a href="https://instagram.com/thelasttablechicago">@thelasttablechicago</a></p></div>
+          </div>
+          <div style="min-height:420px; background:#1B1813; border:1px solid rgba(168,139,85,0.35); display:flex; align-items:flex-end; padding:20px; box-sizing:border-box;"><span style="font-size:10px; letter-spacing:0.3em; color:#A88B55;">MAP BLOCK · 663 N. STATE ST, CHICAGO IL 60654</span><a href="https://maps.google.com/?q=663+N+State+St+Chicago+IL+60654" style="margin-left:auto; border:1px solid #A88B55; border-radius:2px; height:44px; padding:0 18px; display:flex; align-items:center; font-size:11px; font-weight:600; letter-spacing:0.28em; color:#E3D6BC;">GET DIRECTIONS</a></div>
+        </div>
+      </section>
+    </sc-if>
+
+    <sc-if value="{{ isFaq }}" hint-placeholder-val="{{ false }}">
+      <section data-screen-label="FAQ" style="background:#14120E;">
+        <div style="max-width:1000px; margin:0 auto; padding:clamp(64px,9vw,112px) clamp(20px,5vw,56px) 40px; border-bottom:1px solid rgba(168,139,85,0.45);">
+          <div style="font-size:12px; font-weight:600; letter-spacing:0.34em; color:#A88B55; margin-bottom:18px;">KNOW BEFORE YOU GO</div>
+          <h1 style="margin:0 0 20px; font-family:'Limelight',serif; font-weight:400; font-size:clamp(40px,6vw,72px); line-height:1.02; letter-spacing:0.02em;">House notes.</h1>
+          <p style="margin:0; font-family:'Bodoni Moda',serif; font-style:italic; font-size:clamp(19px,2vw,24px); line-height:1.5; color:#C9BFAA; max-width:640px;">A few things worth knowing before your first night with us.</p>
+        </div>
+        <div style="max-width:1000px; margin:0 auto; padding:16px clamp(20px,5vw,56px) clamp(72px,10vw,120px);">
+        <details style="border-bottom:1px solid rgba(168,139,85,0.3);">
+          <summary style="list-style:none; cursor:pointer; display:flex; justify-content:space-between; align-items:center; gap:16px; padding:22px 0; min-height:44px; font-family:'Limelight',serif; font-size:clamp(22px,2.4vw,28px); letter-spacing:0.03em; color:#E3D6BC;"><span>Dress code</span><span aria-hidden="true" style="font-family:'Jost',sans-serif; font-size:24px; color:#A88B55;">+</span></summary>
+          <p style="margin:0 0 24px; max-width:720px; font-size:17px; line-height:1.8; color:#C9BFAA; text-wrap:pretty;">Dress for a night out. Collared shirts, dark denim and evening wear all belong here. Please leave athletic wear, ball caps and beachwear at home.</p>
+        </details>
+        <details style="border-bottom:1px solid rgba(168,139,85,0.3);">
+          <summary style="list-style:none; cursor:pointer; display:flex; justify-content:space-between; align-items:center; gap:16px; padding:22px 0; min-height:44px; font-family:'Limelight',serif; font-size:clamp(22px,2.4vw,28px); letter-spacing:0.03em; color:#E3D6BC;"><span>Age policy</span><span aria-hidden="true" style="font-family:'Jost',sans-serif; font-size:24px; color:#A88B55;">+</span></summary>
+          <p style="margin:0 0 24px; max-width:720px; font-size:17px; line-height:1.8; color:#C9BFAA; text-wrap:pretty;">Guests of every age are welcome for dinner and Sunday brunch with an adult. After 10 PM the room is 21 and over, with valid ID.</p>
+        </details>
+        <details style="border-bottom:1px solid rgba(168,139,85,0.3);">
+          <summary style="list-style:none; cursor:pointer; display:flex; justify-content:space-between; align-items:center; gap:16px; padding:22px 0; min-height:44px; font-family:'Limelight',serif; font-size:clamp(22px,2.4vw,28px); letter-spacing:0.03em; color:#E3D6BC;"><span>Reservations & cancellations</span><span aria-hidden="true" style="font-family:'Jost',sans-serif; font-size:24px; color:#A88B55;">+</span></summary>
+          <p style="margin:0 0 24px; max-width:720px; font-size:17px; line-height:1.8; color:#C9BFAA; text-wrap:pretty;">Book on Resy up to 30 days ahead. We hold tables for 15 minutes. Please cancel at least 24 hours ahead; late cancellations and no-shows may be charged $25 per guest.</p>
+        </details>
+        <details style="border-bottom:1px solid rgba(168,139,85,0.3);">
+          <summary style="list-style:none; cursor:pointer; display:flex; justify-content:space-between; align-items:center; gap:16px; padding:22px 0; min-height:44px; font-family:'Limelight',serif; font-size:clamp(22px,2.4vw,28px); letter-spacing:0.03em; color:#E3D6BC;"><span>Larger parties</span><span aria-hidden="true" style="font-family:'Jost',sans-serif; font-size:24px; color:#A88B55;">+</span></summary>
+          <p style="margin:0 0 24px; max-width:720px; font-size:17px; line-height:1.8; color:#C9BFAA; text-wrap:pretty;">Online booking is for up to six guests. For seven or more, send a private dining inquiry and our events team will take it from there.</p>
+        </details>
+        <details style="border-bottom:1px solid rgba(168,139,85,0.3);">
+          <summary style="list-style:none; cursor:pointer; display:flex; justify-content:space-between; align-items:center; gap:16px; padding:22px 0; min-height:44px; font-family:'Limelight',serif; font-size:clamp(22px,2.4vw,28px); letter-spacing:0.03em; color:#E3D6BC;"><span>Walk-ins</span><span aria-hidden="true" style="font-family:'Jost',sans-serif; font-size:24px; color:#A88B55;">+</span></summary>
+          <p style="margin:0 0 24px; max-width:720px; font-size:17px; line-height:1.8; color:#C9BFAA; text-wrap:pretty;">The bar is held for walk-ins every night, first come, first served.</p>
+        </details>
+        <details style="border-bottom:1px solid rgba(168,139,85,0.3);">
+          <summary style="list-style:none; cursor:pointer; display:flex; justify-content:space-between; align-items:center; gap:16px; padding:22px 0; min-height:44px; font-family:'Limelight',serif; font-size:clamp(22px,2.4vw,28px); letter-spacing:0.03em; color:#E3D6BC;"><span>Allergies & dietary needs</span><span aria-hidden="true" style="font-family:'Jost',sans-serif; font-size:24px; color:#A88B55;">+</span></summary>
+          <p style="margin:0 0 24px; max-width:720px; font-size:17px; line-height:1.8; color:#C9BFAA; text-wrap:pretty;">Tell your captain about any allergies when you sit down. Many dishes can be adjusted, and the spirit-free list is always available.</p>
+        </details>
+        <details style="border-bottom:1px solid rgba(168,139,85,0.3);">
+          <summary style="list-style:none; cursor:pointer; display:flex; justify-content:space-between; align-items:center; gap:16px; padding:22px 0; min-height:44px; font-family:'Limelight',serif; font-size:clamp(22px,2.4vw,28px); letter-spacing:0.03em; color:#E3D6BC;"><span>Corkage</span><span aria-hidden="true" style="font-family:'Jost',sans-serif; font-size:24px; color:#A88B55;">+</span></summary>
+          <p style="margin:0 0 24px; max-width:720px; font-size:17px; line-height:1.8; color:#C9BFAA; text-wrap:pretty;">You are welcome to bring a bottle that isn't on our list. Corkage is $50 per bottle, up to two bottles per table.</p>
+        </details>
+        <details style="border-bottom:1px solid rgba(168,139,85,0.3);">
+          <summary style="list-style:none; cursor:pointer; display:flex; justify-content:space-between; align-items:center; gap:16px; padding:22px 0; min-height:44px; font-family:'Limelight',serif; font-size:clamp(22px,2.4vw,28px); letter-spacing:0.03em; color:#E3D6BC;"><span>Celebrations</span><span aria-hidden="true" style="font-family:'Jost',sans-serif; font-size:24px; color:#A88B55;">+</span></summary>
+          <p style="margin:0 0 24px; max-width:720px; font-size:17px; line-height:1.8; color:#C9BFAA; text-wrap:pretty;">Celebrating something? Add it to your Resy notes and we'll take care of the rest.</p>
+        </details>
+        <details style="border-bottom:1px solid rgba(168,139,85,0.3);">
+          <summary style="list-style:none; cursor:pointer; display:flex; justify-content:space-between; align-items:center; gap:16px; padding:22px 0; min-height:44px; font-family:'Limelight',serif; font-size:clamp(22px,2.4vw,28px); letter-spacing:0.03em; color:#E3D6BC;"><span>Live music</span><span aria-hidden="true" style="font-family:'Jost',sans-serif; font-size:24px; color:#A88B55;">+</span></summary>
+          <p style="margin:0 0 24px; max-width:720px; font-size:17px; line-height:1.8; color:#C9BFAA; text-wrap:pretty;">The band starts when dinner winds down, most nights from 10 PM. No cover for dinner guests.</p>
+        </details>
+        <details style="border-bottom:1px solid rgba(168,139,85,0.3);">
+          <summary style="list-style:none; cursor:pointer; display:flex; justify-content:space-between; align-items:center; gap:16px; padding:22px 0; min-height:44px; font-family:'Limelight',serif; font-size:clamp(22px,2.4vw,28px); letter-spacing:0.03em; color:#E3D6BC;"><span>Photos</span><span aria-hidden="true" style="font-family:'Jost',sans-serif; font-size:24px; color:#A88B55;">+</span></summary>
+          <p style="margin:0 0 24px; max-width:720px; font-size:17px; line-height:1.8; color:#C9BFAA; text-wrap:pretty;">Photograph your table, gladly. Please keep the flash off and give the band and the guests around you their night.</p>
+        </details>
+        <details style="border-bottom:1px solid rgba(168,139,85,0.3);">
+          <summary style="list-style:none; cursor:pointer; display:flex; justify-content:space-between; align-items:center; gap:16px; padding:22px 0; min-height:44px; font-family:'Limelight',serif; font-size:clamp(22px,2.4vw,28px); letter-spacing:0.03em; color:#E3D6BC;"><span>Parking & transit</span><span aria-hidden="true" style="font-family:'Jost',sans-serif; font-size:24px; color:#A88B55;">+</span></summary>
+          <p style="margin:0 0 24px; max-width:720px; font-size:17px; line-height:1.8; color:#C9BFAA; text-wrap:pretty;">Valet details are coming soon. The nearest L stop is Grand on the Red Line, two blocks south.</p>
+        </details>
+        <details style="border-bottom:1px solid rgba(168,139,85,0.3);">
+          <summary style="list-style:none; cursor:pointer; display:flex; justify-content:space-between; align-items:center; gap:16px; padding:22px 0; min-height:44px; font-family:'Limelight',serif; font-size:clamp(22px,2.4vw,28px); letter-spacing:0.03em; color:#E3D6BC;"><span>Gift cards</span><span aria-hidden="true" style="font-family:'Jost',sans-serif; font-size:24px; color:#A88B55;">+</span></summary>
+          <p style="margin:0 0 24px; max-width:720px; font-size:17px; line-height:1.8; color:#C9BFAA; text-wrap:pretty;">Sold online through Toast and at the host stand. They are good for dinner, drinks and the late set.</p>
+        </details>
+        <details style="border-bottom:1px solid rgba(168,139,85,0.3);">
+          <summary style="list-style:none; cursor:pointer; display:flex; justify-content:space-between; align-items:center; gap:16px; padding:22px 0; min-height:44px; font-family:'Limelight',serif; font-size:clamp(22px,2.4vw,28px); letter-spacing:0.03em; color:#E3D6BC;"><span>Accessibility</span><span aria-hidden="true" style="font-family:'Jost',sans-serif; font-size:24px; color:#A88B55;">+</span></summary>
+          <p style="margin:0 0 24px; max-width:720px; font-size:17px; line-height:1.8; color:#C9BFAA; text-wrap:pretty;">Tell us what would make your visit easier when you book, or write to info@atthelasttable.com. We want this website to work for everyone; if something is hard to use, email us and we'll fix it.</p>
+        </details>
+        </div>
+      </section>
+    </sc-if>
+
+  </main>
+
+  <footer data-screen-label="Footer" style="background:#0E0C09; border-top:1px solid rgba(168,139,85,0.45);">
+    <div style="max-width:1320px; margin:0 auto; padding:clamp(56px,8vw,96px) clamp(20px,5vw,56px) 32px; display:grid; grid-template-columns:repeat(auto-fit,minmax(min(230px,100%),1fr)); gap:44px;">
+      <div style="display:flex; flex-direction:column; gap:20px;">
+        <img src="vector/stacked/tlt-stacked-linen-transparent.svg" alt="The Last Table" style="width:180px; display:block;">
+        <p style="margin:0; font-size:14px; line-height:1.8; color:#C9BFAA;">663 N. State St<br>Chicago, IL 60654<br><a href="mailto:info@atthelasttable.com">info@atthelasttable.com</a></p>
+      </div>
+      <div>
+        <div style="font-size:11px; letter-spacing:0.34em; color:#A88B55; margin-bottom:14px;">HOURS</div>
+        <sc-for list="{{ hoursRows }}" as="h" hint-placeholder-count="3">
+          <div style="font-size:14px; line-height:1.6; margin-bottom:12px;"><div>{{ h.days }}</div><div style="color:#C9BFAA;">{{ h.time }}</div></div>
+        </sc-for>
+      </div>
+      <div>
+        <div style="font-size:11px; letter-spacing:0.34em; color:#A88B55; margin-bottom:14px;">THE LIST</div>
+        <p style="margin:0 0 14px; font-family:'Bodoni Moda',serif; font-style:italic; font-size:17px; line-height:1.5; color:#C9BFAA;">The late set, new menus, first word on special nights.</p>
+        <sc-if value="{{ emailNotDone }}" hint-placeholder-val="{{ true }}">
+          <div style="display:flex; border-bottom:1px solid #A88B55;">
+            <input type="email" value="{{ emailVal }}" onChange="{{ onEmail }}" placeholder="Your email" aria-label="Email for newsletter" style="flex:1; min-width:0; background:transparent; border:none; color:#E3D6BC; font-size:15px; padding:12px 0; outline:none;">
+            <button onClick="{{ joinList }}" style="background:none; border:none; color:#A88B55; font-size:11px; font-weight:600; letter-spacing:0.3em; cursor:pointer; min-height:44px;">JOIN</button>
+          </div>
+        </sc-if>
+        <sc-if value="{{ emailErr }}" hint-placeholder-val="{{ false }}"><div style="font-size:13px; color:#D9A27A; margin-top:8px;">Please add a valid email.</div></sc-if>
+        <sc-if value="{{ emailDone }}" hint-placeholder-val="{{ false }}"><div style="font-family:'Bodoni Moda',serif; font-style:italic; font-size:17px;">You're on the list.</div></sc-if>
+        <p style="margin:10px 0 0; font-size:12px; line-height:1.6; color:#8E846F;">News and invitations only. Unsubscribe anytime.</p>
+      </div>
+      <div>
+        <div style="font-size:11px; letter-spacing:0.34em; color:#A88B55; margin-bottom:14px;">VISIT</div>
+        <div style="display:flex; flex-direction:column;">
+          <sc-for list="{{ navItems }}" as="n" hint-placeholder-count="11">
+            <button onClick="{{ n.go }}" style="background:none; border:none; text-align:left; padding:5px 0; font-size:14px; color:#E3D6BC; cursor:pointer;" style-hover="color:#A88B55;">{{ n.label }}</button>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+    <div style="max-width:1320px; margin:0 auto; padding:0 clamp(20px,5vw,56px) 36px;">
+      <div style="display:flex; align-items:center;"><span style="flex:1; height:1px; background:rgba(168,139,85,0.6);"></span>{{ footBulb }}</div>
+      <div style="display:flex; flex-wrap:wrap; justify-content:space-between; gap:12px; margin-top:16px; font-size:11px; letter-spacing:0.24em; color:#6B5A3E;"><span>© 2026 THE LAST TABLE · L&amp;A CORE HOSPITALITY</span><span style="display:flex; flex-wrap:wrap; gap:18px;"><button onClick="{{ goFaq }}" style="background:none; border:none; padding:0; font:inherit; letter-spacing:inherit; color:#8E846F; cursor:pointer;">ACCESSIBILITY</button><a href="#privacy" style="color:#8E846F;">PRIVACY</a><a href="#terms" style="color:#8E846F;">TERMS</a></span><span><a href="https://instagram.com/thelasttablechicago" style="color:#6B5A3E;">INSTAGRAM</a> · THELASTTABLECHICAGO.COM</span></div>
+    </div>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;startPage&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;home&quot;,&quot;menus&quot;,&quot;reserve&quot;,&quot;private&quot;,&quot;music&quot;,&quot;story&quot;,&quot;gift&quot;,&quot;press&quot;,&quot;careers&quot;,&quot;contact&quot;],&quot;default&quot;:&quot;home&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Prototype&quot;},&quot;launchState&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;auto&quot;,&quot;coming-soon&quot;,&quot;open&quot;],&quot;default&quot;:&quot;auto&quot;,&quot;tsType&quot;:&quot;'auto' | 'coming-soon' | 'open'&quot;,&quot;section&quot;:&quot;Prototype&quot;},&quot;flicker&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Prototype&quot;}}">
+class Component extends DCLogic {
+  state = {
+    now: Date.now(), page: this.props.startPage ?? 'home', drawer: false, tab: 'dinner', menu: [], svg: '',
+    form: { name: '', email: '', phone: '', date: '', guests: '', type: 'Dinner party', notes: '' }, errors: {}, sent: false,
+    email: '', emailState: ''
+  };
+  componentWillUnmount() { clearInterval(this.timer); }
+  componentDidMount() {
+    this.timer = setInterval(() => this.setState({ now: Date.now() }), 1000);
+    import('./tlt-menu-data.js').then(m => this.setState({ menu: m.pages }));
+    fetch('vector/primary/tlt-primary-linen-transparent.svg').then(r => r.text()).then(t => this.setState({ svg: t })).catch(() => {});
+  }
+  componentDidUpdate(prev) { if (prev.startPage !== this.props.startPage && this.props.startPage) this.go(this.props.startPage); }
+  go(page, extra) { this.setState({ page, drawer: false, ...(extra || {}) }); try { window.scrollTo(0, 0); } catch (e) {} }
+  prepSvg(t, flicker) {
+    t = t.replace(/<metadata>[\s\S]*?<\/metadata>/, '').replace(/width="1526" height="432"/, 'width="100%" role="img" aria-label="The Last Table — Supper Club, Chicago" style="display:block;height:auto;overflow:visible"');
+    if (!flicker) return t;
+    t = t.replace('<g id="bulb"', '<defs><radialGradient id="tltGlowGrad"><stop offset="0" stop-color="#C4732E" stop-opacity="0.6"></stop><stop offset="1" stop-color="#C4732E" stop-opacity="0"></stop></radialGradient></defs><g id="bulb"');
+    t = t.replace(/(<g id="bulb"[^>]*>)/, '$1<circle cx="44" cy="22" r="30" fill="url(#tltGlowGrad)" style="animation:tltGlow 7s infinite"></circle>');
+    return t.replace('id="filament"', 'id="filament" style="animation:tltFlicker 7s infinite"');
+  }
+  bulb(w, flicker) {
+    const h = React.createElement;
+    return h('svg', { viewBox: '0 0 80 44', 'aria-hidden': true, style: { width: w, height: w * 44 / 80, display: 'block', overflow: 'visible', flex: 'none' } },
+      h('defs', null, h('radialGradient', { id: 'tltGlowSm' }, h('stop', { offset: 0, stopColor: '#C4732E', stopOpacity: 0.55 }), h('stop', { offset: 1, stopColor: '#C4732E', stopOpacity: 0 }))),
+      flicker ? h('circle', { cx: 44, cy: 22, r: 30, fill: 'url(#tltGlowSm)', style: { animation: 'tltGlow 7s infinite' } }) : null,
+      h('rect', { x: 0, y: 14, width: 18, height: 16, rx: 1.5, fill: '#A88B55' }),
+      h('path', { d: 'M5,14 V30 M10,14 V30 M15,14 V30', stroke: '#5E4C2C', strokeWidth: 1, opacity: 0.9 }),
+      h('path', { d: 'M18,16 C28,15 34,7 46,3.5 A19,19 0 1 1 46,40.5 C34,37 28,29 18,28 Z', fill: 'none', stroke: '#E3D6BC', strokeWidth: 1.3, strokeLinejoin: 'round' }),
+      h('path', { d: 'M22,19 L40,18 M22,25 L40,26', stroke: '#E3D6BC', strokeWidth: 0.9, opacity: 0.7 }),
+      h('path', { d: 'M40,18 C56,12 58,32 40,26', fill: 'none', stroke: '#7A3E1C', strokeWidth: 1.6, strokeLinecap: 'round', style: flicker ? { animation: 'tltFlicker 7s infinite' } : null }));
+  }
+  setField = k => e => { const v = e.target.value; this.setState(s => ({ form: { ...s.form, [k]: v } })); };
+  submitInquiry = () => {
+    const f = this.state.form, errors = {};
+    if (!f.name.trim()) errors.name = 1;
+    if (!/^\S+@\S+\.\S+$/.test(f.email)) errors.email = 1;
+    if (!f.date) errors.date = 1;
+    if (!(+f.guests >= 1)) errors.guests = 1;
+    this.setState({ errors, sent: Object.keys(errors).length === 0 });
+  };
+  joinList = () => { this.setState(s => ({ emailState: /^\S+@\S+\.\S+$/.test(s.email) ? 'done' : 'err' })); };
+  renderVals() {
+    const flicker = this.props.flicker ?? true;
+    const OPEN_AT = Date.parse('2026-11-17T16:00:00-06:00');
+    const mode = this.props.launchState ?? 'auto';
+    const comingSoon = mode === 'coming-soon' || (mode === 'auto' && this.state.now < OPEN_AT);
+    const ms = Math.max(0, OPEN_AT - this.state.now);
+    const countdown = [[Math.floor(ms / 864e5), 'DAYS'], [Math.floor(ms / 36e5) % 24, 'HOURS'], [Math.floor(ms / 6e4) % 60, 'MINUTES'], [Math.floor(ms / 1e3) % 60, 'SECONDS']].map(([v, l]) => ({ v: String(v).padStart(2, '0'), l }));
+    const { page, tab } = this.state;
+    const pages = [['home','Home'],['menus','Menus'],['reserve','Reservations'],['private','Private Dining'],['music','Live Music'],['story','Our Story'],['gift','Gift Cards'],['press','Press'],['careers','Careers'],['contact','Hours & Contact'],['faq','FAQ']];
+    const navItems = pages.map(([id, label]) => ({ label, active: id === page, go: () => this.go(id) }));
+    const hoursRows = [
+      { days: 'Monday – Thursday', time: '4 PM – 2 AM' },
+      { days: 'Friday – Saturday', time: '4 PM – 3:30 AM' },
+      { days: 'Sunday', time: 'Brunch 9 AM – 3 PM · Dinner 5 PM – 2 AM' }
+    ];
+    const d = new Date().getDay();
+    const todayHours = d === 0 ? 'Brunch 9 AM – 3 PM · 5 PM – 2 AM' : d >= 5 ? '4 PM – 3:30 AM' : '4 PM – 2 AM';
+    const events = [
+      { day: '02', mon: 'OCT', dow: 'FRIDAY', time: '10 PM – 1 AM', title: 'The Late Set', who: 'House trio · jazz standards' },
+      { day: '03', mon: 'OCT', dow: 'SATURDAY', time: '10:30 PM – 1:30 AM', title: 'Saturday After Dark', who: 'Guest vocalist with the house trio' },
+      { day: '04', mon: 'OCT', dow: 'SUNDAY', time: '6 – 9 PM', title: 'Sunday Supper Sessions', who: 'Solo piano through dinner' },
+      { day: '08', mon: 'OCT', dow: 'THURSDAY', time: '10 PM – 1 AM', title: 'The Late Set', who: 'House trio · jazz standards' },
+      { day: '09', mon: 'OCT', dow: 'FRIDAY', time: '10 PM – 1 AM', title: 'Soul at the Last Table', who: 'Five-piece soul & R&B' },
+      { day: '10', mon: 'OCT', dow: 'SATURDAY', time: '10:30 PM – 1:30 AM', title: 'Saturday After Dark', who: 'Guest vocalist with the house trio' }
+    ];
+    const brunchSecs = this.state.menu.filter(p => p.menu === 'bar').flatMap(p => p.columns.flat()).filter(s => /brunch/i.test(s.head || ''));
+    const brunchPages = [{ kicker: 'SUNDAY BRUNCH · 9 AM – 3 PM', title: 'The first seating', columns: [[...brunchSecs, { head: 'From the Kitchen', items: [], note: 'The brunch food menu arrives before opening day.' }]] }];
+    const menuGroups = (tab === 'brunch' ? brunchPages : this.state.menu.filter(p => (tab === 'dinner' ? p.menu === 'dinner' : p.menu === 'bar'))).map(p => ({
+      kicker: p.kicker, title: p.title, showHead: tab !== 'dinner',
+      sections: p.columns.flat().map(s => ({ head: s.head || '', hasHead: !!s.head, note: s.note || '', hasNote: !!s.note, items: s.items.map(it => ({ ...it, hasDesc: !!it.desc })) }))
+    }));
+    const err = this.state.errors;
+    const heroMark = this.state.svg
+      ? React.createElement('div', { dangerouslySetInnerHTML: { __html: this.prepSvg(this.state.svg, flicker) } })
+      : React.createElement('img', { src: 'vector/primary/tlt-primary-linen-transparent.svg', alt: 'The Last Table — Supper Club, Chicago', style: { width: '100%', display: 'block' } });
+    const mail = r => 'mailto:info@atthelasttable.com?subject=' + encodeURIComponent('Application — ' + r);
+    return {
+      navItems, hoursRows, events, eventsSoon: events.slice(0, 3), menuGroups, heroMark,
+      footBulb: this.bulb(40, flicker), cardBulb: this.bulb(44, flicker),
+      todayHours, todayHoursCaps: todayHours.toUpperCase(),
+      isOpen: !comingSoon, isComingSoon: comingSoon, countdown,
+      heroStrip: comingSoon ? 'NOVEMBER 17 · 4 PM · STATE & ERIE' : 'TONIGHT · ' + todayHours.toUpperCase(),
+      isHome: page === 'home', isMenus: page === 'menus', isReserve: page === 'reserve', isPrivate: page === 'private', isMusic: page === 'music',
+      isStory: page === 'story', isGift: page === 'gift', isPress: page === 'press', isCareers: page === 'careers', isContact: page === 'contact', isFaq: page === 'faq', goFaq: () => this.go('faq'),
+      drawerOpen: this.state.drawer, openDrawer: () => this.setState({ drawer: true }), closeDrawer: () => this.setState({ drawer: false }),
+      goHome: () => this.go('home'), goMenus: () => this.go('menus'), goMenusDinner: () => this.go('menus', { tab: 'dinner' }), goMenusAfter: () => this.go('menus', { tab: 'after' }),
+      goReserve: () => this.go('reserve'), goPrivate: () => this.go('private'), goMusic: () => this.go('music'), goStory: () => this.go('story'),
+      tabDinner: () => this.setState({ tab: 'dinner' }), tabAfter: () => this.setState({ tab: 'after' }),
+      tabDinnerBg: tab === 'dinner' ? '#A88B55' : 'transparent', tabDinnerFg: tab === 'dinner' ? '#14120E' : '#E3D6BC',
+      tabAfterBg: tab === 'after' ? '#A88B55' : 'transparent', tabAfterFg: tab === 'after' ? '#14120E' : '#E3D6BC',
+      tabBrunchBg: tab === 'brunch' ? '#A88B55' : 'transparent', tabBrunchFg: tab === 'brunch' ? '#14120E' : '#E3D6BC', tabBrunch: () => this.setState({ tab: 'brunch' }),
+      form: this.state.form, onName: this.setField('name'), onFormEmail: this.setField('email'), onPhone: this.setField('phone'), onDate: this.setField('date'), onGuests: this.setField('guests'), onType: this.setField('type'), onNotes: this.setField('notes'),
+      errName: !!err.name, errEmail: !!err.email, errDate: !!err.date, errGuests: !!err.guests,
+      submitInquiry: this.submitInquiry, sent: this.state.sent, notSent: !this.state.sent,
+      eventTypes: ['Dinner party', 'Birthday / celebration', 'Rehearsal dinner', 'Corporate dinner', 'Full buyout', 'Something else'],
+      emailVal: this.state.email, onEmail: e => this.setState({ email: e.target.value, emailState: '' }), joinList: this.joinList,
+      emailDone: this.state.emailState === 'done', emailNotDone: this.state.emailState !== 'done', emailErr: this.state.emailState === 'err',
+      igTiles: ['COCKTAIL · STATE & ERIE', 'THE BAR AT 11', 'TARTARE', 'THE LATE SET', 'BRASS & MARBLE', 'LAST FLIGHT'],
+      pressKit: [
+        { label: 'Logo files (SVG + PNG)', kind: 'ZIP', href: 'TLT-Logo-Files.zip' },
+        { label: 'Dinner menu', kind: 'PDF', href: 'TLT Dinner Menu-print.dc.html' },
+        { label: 'Bar menu', kind: 'PDF', href: 'TLT Bar Menu-print.dc.html' },
+        { label: 'Brand identity', kind: 'PDF', href: 'TLT Brand Identity-print.dc.html' }
+      ],
+      facts: [
+        { k: 'CONCEPT', v: 'Supper club · cocktails · live music' },
+        { k: 'ADDRESS', v: '663 N. State St, Chicago, IL 60654' },
+        { k: 'HOURS', v: 'Mon–Thu 4 PM–2 AM · Fri–Sat 4 PM–3:30 AM · Sun brunch 9 AM–3 PM, dinner 5 PM–2 AM' },
+        { k: 'OWNER', v: 'L&A Core Hospitality' },
+        { k: 'CO-FOUNDER', v: 'LeQoinne Rice' },
+        { k: 'RESERVATIONS', v: 'Resy' },
+        { k: 'PRESS CONTACT', v: 'info@atthelasttable.com' }
+      ],
+      roles: [
+        { title: 'Captain', meta: 'FRONT OF HOUSE · FULL TIME', href: mail('Captain') },
+        { title: 'Server', meta: 'FRONT OF HOUSE · FULL & PART TIME', href: mail('Server') },
+        { title: 'Bartender', meta: 'BAR · FULL & PART TIME', href: mail('Bartender') },
+        { title: 'Barback', meta: 'BAR · PART TIME', href: mail('Barback') },
+        { title: 'Host', meta: 'FRONT OF HOUSE · PART TIME', href: mail('Host') },
+        { title: 'Line Cook', meta: 'KITCHEN · FULL TIME', href: mail('Line Cook') }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>
