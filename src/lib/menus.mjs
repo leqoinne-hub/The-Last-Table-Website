@@ -8,18 +8,17 @@ export const TABS = [
   { id: 'brunch', label: 'Brunch' },
 ];
 
-// Groups for one tab: Dinner is the single dinner page; Bar is every bar page under its own
-// kicker and title; Brunch is the Brunch Cocktails section plus a note until the food menu exists.
+// Groups for one tab: Dinner is the single dinner page under its credit line; Bar is every bar page
+// under its own kicker and title; Brunch is the Brunch Cocktails section plus a note until the food menu exists.
 export function menuGroups(pages, tab) {
   if (tab === 'dinner') {
-    return pages.filter((p) => p.menu === 'dinner').map((p) => ({ showHead: false, sections: p.columns.flat() }));
+    return pages.filter((p) => p.menu === 'dinner').map((p) => ({ kicker: p.credit, sections: p.columns.flat() }));
   }
   if (tab === 'bar') {
-    return pages.filter((p) => p.menu === 'bar').map((p) => ({ showHead: true, kicker: p.kicker, title: p.title, sections: p.columns.flat() }));
+    return pages.filter((p) => p.menu === 'bar').map((p) => ({ kicker: p.kicker, title: p.title, sections: p.columns.flat() }));
   }
   const brunch = pages.filter((p) => p.menu === 'bar').flatMap((p) => p.columns.flat()).filter((s) => /brunch/i.test(s.head || ''));
   return [{
-    showHead: true,
     kicker: 'Sunday Jazz Brunch · 9 AM – 3 PM',
     title: 'The first seating',
     sections: [...brunch, { head: 'From the Kitchen', items: [], note: 'The brunch food menu arrives before opening day.' }],
@@ -43,8 +42,8 @@ export function menuPanel(pages, tab, { selected }) {
   return html`<div class="tlt-menu-panel" id="panel-${tab}" role="tabpanel" aria-labelledby="tab-${tab}" data-panel="${tab}"${selected ? '' : raw(' data-start-hidden')}>
   <h2 class="tlt-panel-title">${t.label}</h2>
   ${menuGroups(pages, tab).map((g) => html`<div class="tlt-group">
-    ${g.showHead ? html`<div class="tlt-group-head"><p class="tlt-group-kicker">${g.kicker}</p><h3 class="tlt-group-title">${g.title}</h3></div>` : ''}
-    <div class="tlt-sections">${g.sections.map((s) => section(s, g.showHead ? 4 : 3))}</div>
+    ${g.kicker || g.title ? html`<div class="tlt-group-head">${g.kicker ? html`<p class="tlt-group-kicker">${g.kicker}</p>` : ''}${g.title ? html`<h3 class="tlt-group-title">${g.title}</h3>` : ''}</div>` : ''}
+    <div class="tlt-sections">${g.sections.map((s) => section(s, g.title ? 4 : 3))}</div>
   </div>`)}
 </div>`;
 }
