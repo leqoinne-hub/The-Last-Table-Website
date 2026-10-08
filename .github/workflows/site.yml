@@ -43,10 +43,11 @@ jobs:
           node-version: 22
       - id: pages
         uses: actions/configure-pages@v5
+      # GitHub reports a custom domain as http:// until HTTPS is enforced; the public site is always https://.
       - name: Build for the Pages address
-        run: npm run build
+        run: SITE_URL="${PAGES_URL/#http:/https:}" npm run build
         env:
-          SITE_URL: ${{ steps.pages.outputs.base_url }}
+          PAGES_URL: ${{ steps.pages.outputs.base_url }}
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist
