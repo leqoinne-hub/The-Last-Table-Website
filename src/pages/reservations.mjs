@@ -1,5 +1,5 @@
 import { html, raw } from '../lib/html.mjs';
-import { href, pageHeader, hoursRows, resyHref } from '../lib/components.mjs';
+import { href, pageHeader, hoursRows, newsletterForm } from '../lib/components.mjs';
 
 export default {
   id: 'reserve',
@@ -8,13 +8,23 @@ export default {
   description: 'Book a table at The Last Table on Resy. The bar is held for walk-ins every night.',
   render(ctx) {
     const { resy } = ctx.site;
-    const widget = resy.embedHtml
-      ? html`<div class="resy resy--live">${raw(resy.embedHtml)}</div>`
-      : html`<div class="resy">
+    let widget;
+    if (resy.embedHtml) {
+      widget = html`<div class="resy resy--live">${raw(resy.embedHtml)}</div>`;
+    } else if (resy.url) {
+      widget = html`<div class="resy">
           <p class="label">Reservations on Resy</p>
           <p class="resy__line">Pick a party size, date and time — every table is booked through Resy.</p>
-          <a class="btn btn--fill" href="${resyHref(ctx)}">Find a table on Resy</a>
+          <a class="btn btn--fill" href="${resy.url}">Find a table on Resy</a>
         </div>`;
+    } else {
+      // No Resy link yet: invite guests to the list instead of sending them to resy.com.
+      widget = html`<div class="resy">
+          <p class="label">Reservations on Resy</p>
+          <p class="resy__line">Reservations open soon. Join the list and we'll let you know the moment they do.</p>
+          ${newsletterForm(ctx, 'hero')}
+        </div>`;
+    }
     return html`
 <section class="ground-ink">
   ${pageHeader({ kicker: 'Reservations', title: 'Hold a table.', lede: 'Book through Resy. The bar is always first come, first served.' })}

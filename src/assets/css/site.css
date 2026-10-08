@@ -327,12 +327,10 @@ html[data-launch="coming-soon"] .only-open { display: none !important; }
 /* ---------- Photos ---------- */
 
 .photo { width: 100%; object-fit: cover; background: var(--photo); }
-.photo--placeholder { display: flex; align-items: flex-end; padding: 20px; }
-.photo--placeholder span { font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--brass); }
+.photo--placeholder { display: flex; align-items: center; justify-content: center; }
+.photo__mark { width: clamp(56px, 16%, 96px); height: auto; opacity: 0.5; }
 .photo--framed { background: var(--ink); border: 1px solid var(--rule-card); }
 .photo--tile { background: var(--card); border: 1px solid rgba(168, 139, 85, 0.25); }
-.photo--tile.photo--placeholder { padding: 12px; }
-.photo--tile.photo--placeholder span { font-size: 9px; letter-spacing: 0.28em; color: #6B5A3E; }
 .story .photo { margin-bottom: 40px; }
 
 /* ---------- Logo marks ---------- */
