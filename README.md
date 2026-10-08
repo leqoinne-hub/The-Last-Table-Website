@@ -39,7 +39,9 @@ Each build ends with a **"Still needed before launch"** list. It reads the conte
 ## Put it online
 
 - **Netlify** (easiest): connect this repository and it builds itself (`netlify.toml`). Point `thelasttablechicago.com` at it when you're ready.
-- **GitHub Pages** (free preview link): make `main` the default branch (Settings → General), then set Settings → Pages → Source to *GitHub Actions*. Every push to `main` then publishes to https://leqoinne-hub.github.io/The-Last-Table-Website/. Private repositories need a paid GitHub plan for Pages.
+- **GitHub Pages** (live now): every push to `main` publishes to https://www.thelasttablechicago.com. It's set up under Settings → Pages: Source *GitHub Actions*, Custom domain `www.thelasttablechicago.com`, Enforce HTTPS on.
+  - DNS lives in Squarespace (Domains → thelasttablechicago.com → DNS). There are four A records for `@` (185.199.108.153, 185.199.109.153, 185.199.110.153, 185.199.111.153) and one CNAME, `www` → `leqoinne-hub.github.io`.
+  - Leave the Google Workspace records alone; they carry the email.
 - **Squarespace**: follow `squarespace/README.md`.
 
 ### Forms
