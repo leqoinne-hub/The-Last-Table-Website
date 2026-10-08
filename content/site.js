@@ -22,7 +22,11 @@ export const site = {
   },
 
   owner: 'L&A Core Hospitality',
-  founder: { name: 'LeQoinne Rice', title: 'Co-Founder' }, // the handoff README says "Owner"; the prototype says "Co-Founder"
+  // Signed on Our Story and listed on the Press fact sheet, in this order.
+  founders: [
+    { name: 'LeQoinne Rice', title: 'Co-Founder' },
+    { name: 'Azeez Yusuf', title: 'Co-Founder' },
+  ],
 
   // Coming-soon countdown. mode: 'auto' (count down, then open) · 'coming-soon' · 'open'.
   // Preview either state on any page with ?launch=open or ?launch=coming-soon.

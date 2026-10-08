@@ -499,7 +499,8 @@ html:not(.js) .tlt-tabs { display: none; }
 .story__lede { margin-bottom: 40px; font-family: var(--serif); font-style: italic; font-size: clamp(21px, 2.4vw, 28px); line-height: 1.5; text-align: center; color: var(--on-linen-2); text-wrap: pretty; }
 .story__body { margin-bottom: 24px; font-size: 18px; line-height: 1.85; color: var(--on-linen-2); text-wrap: pretty; }
 .story__body:last-of-type { margin-bottom: 48px; }
-.story__sign { display: flex; flex-direction: column; align-items: center; gap: 10px; padding-top: 28px; border-top: 1px solid var(--brass); }
+.story__sign { display: flex; flex-wrap: wrap; justify-content: center; gap: 24px clamp(40px, 8vw, 96px); padding-top: 28px; border-top: 1px solid var(--brass); }
+.story__signer { display: flex; flex-direction: column; align-items: center; gap: 10px; }
 .story__name { font-family: var(--serif); font-style: italic; font-size: 22px; }
 .story__role { font-size: 11px; letter-spacing: 0.34em; text-transform: uppercase; color: var(--label-on-linen); }
 
