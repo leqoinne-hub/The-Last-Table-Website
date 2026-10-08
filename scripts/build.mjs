@@ -112,12 +112,12 @@ downloads.logoZip = 'assets/downloads/tlt-logo-files.zip';
 // ---------- what's still needed ----------
 
 if (!site.phone) todo('Phone number (content/site.js → phone)');
-if (!site.resy.url) todo('Resy venue link (content/site.js → resy.url); the button points to resy.com until then');
+if (!site.resy.url) todo('Resy venue link (content/site.js → resy.url); until then the Reservations page invites guests to join the list');
 if (!site.resy.embedHtml) todo('Resy booking-widget code, optional (content/site.js → resy.embedHtml)');
-if (!site.toast.giftCardUrl) todo('Toast gift-card link (content/site.js → toast.giftCardUrl); the buttons point to toasttab.com until then');
+if (!site.toast.giftCardUrl) todo('Toast gift-card link (content/site.js → toast.giftCardUrl); until then the page says gift cards go on sale soon');
 if (!site.forms.newsletter) todo('Newsletter form endpoint (content/site.js → forms.newsletter); until then, signups open the guest\'s email app');
 if (!site.forms.inquiry) todo('Private dining form endpoint (content/site.js → forms.inquiry); until then, inquiries open the guest\'s email app');
-if (eventsSample) todo('Live music schedule: content/events.js is sample data');
+if (eventsSample) todo('Live music schedule: content/events.js holds sample nights, kept off the site until `sample` is set to false');
 if (rolesPlaceholder) todo('Open roles: content/careers.js holds placeholders; confirm with HR');
 if (!policiesApproved) todo('Approve the draft house policies listed at the top of content/faq.js (also on Reservations and Live Music)');
 if (legalDraft) todo('Have counsel review the draft Privacy and Terms pages (src/pages/legal.mjs)');
@@ -126,7 +126,7 @@ if (legalDraft) todo('Have counsel review the draft Privacy and Terms pages (src
 
 const openAt = Date.parse(site.launch.openAt);
 const base = {
-  site, siteUrl, menuPages, events, faq, roles, photos, photoFiles, downloads, todo,
+  site, siteUrl, menuPages, events: eventsSample ? [] : events, faq, roles, photos, photoFiles, downloads, todo,
   year: new Date().getFullYear(),
   primarySvg: join(ASSETS, 'vector', 'primary', 'tlt-primary-linen-transparent.svg'),
   launchDefault: site.launch.mode === 'auto' ? (Date.now() < openAt ? 'coming-soon' : 'open') : site.launch.mode,

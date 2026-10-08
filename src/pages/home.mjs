@@ -8,6 +8,9 @@ export default {
   description: 'A supper club at State & Erie, Chicago: dinner from four, cocktails that run late, and a live set when the plates clear.',
   render(ctx) {
     const { site } = ctx;
+    // The "From the room" grid shows only real photos; until then the section is the heading and handle.
+    const igTiles = [1, 2, 3, 4, 5, 6].map((i) => `ig-${i}`).filter((k) => ctx.photoFiles[k]);
+    if (igTiles.length < 6) ctx.todo('Photos for the "From the room" grid on Home (src/assets/photos/ig-1.webp … ig-6.webp); only added ones show');
     return html`
 <section class="hero ground-ink">
   <h1 class="hero__title">${primaryMark(ctx.primarySvg, site.flicker)}</h1>
@@ -94,7 +97,7 @@ export default {
       <h2 class="h2 h2--ig">From the room</h2>
       <a class="link-cta link-cta--brass" href="${site.instagram.url}">@${site.instagram.handle}</a>
     </div>
-    <div class="ig-grid">${[1, 2, 3, 4, 5, 6].map((i) => photo(ctx, `ig-${i}`, 'photo--tile'))}</div>
+    ${igTiles.length ? html`<div class="ig-grid">${igTiles.map((k) => photo(ctx, k, 'photo--tile'))}</div>` : ''}
   </div>
 </section>`;
   },

@@ -7,7 +7,7 @@ export default {
   title: 'Gift Cards · The Last Table · Supper Club · Chicago',
   description: 'Give someone the last table. Digital or physical gift cards in any amount, good for dinner, drinks and the late set.',
   render(ctx) {
-    const url = ctx.site.toast.giftCardUrl || 'https://www.toasttab.com';
+    const url = ctx.site.toast.giftCardUrl;
     return html`
 <section class="ground-ink">
   <div class="container section-page split">
@@ -21,10 +21,10 @@ export default {
       <p class="kicker">Gift cards</p>
       <h1 class="h1">Give someone the last table.</h1>
       <p class="lede">Digital or physical, any amount. Good for dinner, drinks and the late set.</p>
-      <div class="btn-row">
+      ${url ? html`<div class="btn-row">
         <a class="btn btn--fill" href="${url}">Buy on Toast</a>
         <a class="btn btn--ghost" href="${url}">Check a balance</a>
-      </div>
+      </div>` : html`<p class="label">Gift cards go on sale soon</p>`}
     </div>
   </div>
 </section>`;

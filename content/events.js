@@ -1,8 +1,9 @@
 // Live music calendar. Past dates hide themselves on the site (Chicago time; a night runs until 4 AM).
 // Home shows the next three. `who` is the one-line excerpt under the title.
 //
-// SAMPLE DATA: the six nights from the design prototype, moved to opening weeks so the
-// preview has something to show. Replace with the real schedule and set `sample` to false.
+// SAMPLE DATA: the six nights from the design prototype, moved to opening weeks. While `sample`
+// is true they stay off the site, which shows "The next lineup is on its way" instead.
+// Replace them with the real schedule and set `sample` to false to publish.
 
 export const sample = true;
 

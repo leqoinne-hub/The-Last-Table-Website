@@ -50,7 +50,7 @@ The build lists these live. The full list is:
 
 - Phone number · Resy venue link (and widget code, optional) · Toast gift-card link
 - Room capacities (fire-marshal numbers) · events packet PDF · dinner, bar and brand PDFs
-- Photography (10 slots, each labeled with the shot it needs) · brunch food menu · food prices
+- Photography (10 slots; `src/assets/photos/README.md` lists the shots) · brunch food menu · food prices
 - Live music schedule (the calendar holds sample nights) · open roles (placeholders, confirm with HR)
 - Valet and parking details · kitchen closing time · holiday-hours process
 - **Approval of the draft policies**: dress code wording · 21+ after 10 PM · $25 no-show fee and 24-hour window · 30-day booking window and 15-minute hold · $50 corkage (two bottles) · no cover for dinner guests · walk-in bar · two-business-day reply on inquiries
@@ -62,8 +62,11 @@ These are places where the build departs from, or fills a gap in, the handoff. E
 
 - **Footer fine print.** The copyright row uses `#8E846F` instead of `#6B5A3E`. The original measures 2.9:1 on the footer background, which fails WCAG AA; the new color measures 5.3:1.
 - **Chicago time.** "Tonight" hours and past-event hiding use Chicago time, and the night rolls over at 4 AM. At 1 AM Saturday the site still shows Friday's hours. The handoff used the visitor's own clock.
-- **Sample events.** The six sample nights from the prototype were moved to the opening weeks (Nov 20 – Dec 3) so the calendar isn't empty in the preview.
+- **Ready for the public.** Anything still missing degrades gracefully instead of showing a placeholder:
+  - The prototype's sample music nights stay off the site; the calendar says "The next lineup is on its way" until real dates are added.
+  - Photo slots show a quiet bulb mark until the photo arrives, and the "From the room" grid shows only real photos.
+  - Without a Resy link, the Reservations panel invites guests to join the list. Without a Toast link, Gift Cards says they go on sale soon.
 - **Bar allergen notes.** The bar menus' footer lines, such as "Green Room: milk and egg…", aren't shown, because the prototype doesn't show them. Consider moving allergen lines into section notes so guests see them online.
-- **Links and placeholders.** Download links stay hidden until the file exists, so the site never shows a broken link. The Resy and Toast buttons fall back to resy.com and toasttab.com, as in the prototype. The Resy panel uses guest-facing copy instead of the designer note.
+- **Downloads.** Download links stay hidden until the file exists, so the site never shows a broken link.
 - **Email consent.** The consent line ("News and invitations only. Unsubscribe anytime.") also appears under the coming-soon signup, per the launch checklist.
 - **New copy.** The Privacy and Terms drafts, the 404 page and the "next lineup is on its way" empty state are new. Please review them.

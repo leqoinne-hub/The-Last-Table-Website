@@ -61,7 +61,7 @@ export function photo(ctx, key, cls = '') {
     return html`<img class="photo ${cls}" src="assets/photos/${file}" alt="${p.alt}" loading="lazy" decoding="async" style="aspect-ratio:${p.ratio}">`;
   }
   ctx.todo(`Photo: ${p.label.replace(/^Photo · /, '')} (src/assets/photos/${key}.webp)`);
-  return html`<div class="photo photo--placeholder ${cls}" style="aspect-ratio:${p.ratio}" aria-hidden="true"><span>${p.label}</span></div>`;
+  return html`<div class="photo photo--placeholder ${cls}" style="aspect-ratio:${p.ratio}" aria-hidden="true"><img class="photo__mark" src="assets/vector/device/tlt-bulb-onecolor-linen.svg" alt="" width="80" height="44" loading="lazy"></div>`;
 }
 
 // ---------- Repeated blocks ----------
@@ -84,10 +84,6 @@ export function tonightDefault(ctx) {
 
 export function mailHref(ctx, subject, to = ctx.site.email) {
   return `mailto:${to}${subject ? `?subject=${encodeURIComponent(subject)}` : ''}`;
-}
-
-export function resyHref(ctx) {
-  return ctx.site.resy.url || 'https://resy.com';
 }
 
 let formN = 0;
