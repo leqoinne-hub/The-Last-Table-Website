@@ -20,7 +20,7 @@ export default {
       ['Address', `${a.street}, ${a.city}, ${a.region} ${a.postal}`],
       ['Hours', site.hoursShort],
       ['Owner', site.owner],
-      [site.founder.title, site.founder.name],
+      ['Co-Founders', site.founders.map((f) => f.name).join(' & ')],
       ['Reservations', 'Resy'],
       ['Press contact', html`<a href="${mailHref(ctx, 'Press')}">${site.email}</a>`],
     ];

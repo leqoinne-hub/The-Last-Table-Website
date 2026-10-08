@@ -3,7 +3,7 @@ const I = (name, desc, price, sub) => ({ name, desc: desc || '', price: price ||
 const S = (head, items, note) => ({ head, items, note: note || '' });
 
 export const pages = [
-  { id: 'dinner', menu: 'dinner', kicker: 'DINNER', title: 'Autumn 2026 · 663 N. State Street, Chicago', bg: 'linen', cols: 3, columns: [
+  { id: 'dinner', menu: 'dinner', kicker: 'DINNER', title: 'Autumn 2026 · 663 N. State Street, Chicago', credit: 'Created by Co-Founder Azeez Yusuf', bg: 'linen', cols: 3, columns: [
     [ S('To Start', [
       I('PB&J', 'Pullman milk bread, peanut foie mousse, pickled sour cherry jam, fleur de sel'),
       I('House Bread', 'brown butter, roasted garlic, Parmesan, herbs'),
