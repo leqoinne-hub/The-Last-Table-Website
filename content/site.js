@@ -30,7 +30,9 @@ export const site = {
 
   // Coming-soon countdown. mode: 'auto' (count down, then open) · 'coming-soon' · 'open'.
   // Preview either state on any page with ?launch=open or ?launch=coming-soon.
-  launch: { mode: 'auto', openAt: '2026-11-17T16:00:00-06:00', label: 'November 17 · 4 PM' },
+  // holding: while true, the public site is the coming-soon page alone (no menu, no links) and
+  // every other page stays unpublished. Set it to false to publish the full site.
+  launch: { mode: 'auto', openAt: '2026-11-17T16:00:00-06:00', label: 'November 17 · 4 PM', holding: true },
   flicker: true,
 
   // Hours, as shown on the site. `schema` feeds the Google structured data.

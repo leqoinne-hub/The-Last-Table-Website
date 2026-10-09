@@ -6,8 +6,9 @@
   "type": "module",
   "scripts": {
     "build": "node scripts/build.mjs",
-    "dev": "node scripts/build.mjs && node scripts/serve.mjs",
-    "check": "node scripts/build.mjs && node scripts/check.mjs"
+    "dev": "node scripts/build.mjs --full && node scripts/serve.mjs",
+    "dev:public": "node scripts/build.mjs && node scripts/serve.mjs",
+    "check": "node scripts/build.mjs --full && node scripts/check.mjs && node scripts/build.mjs && node scripts/check.mjs"
   },
   "engines": {
     "node": ">=20"

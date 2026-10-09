@@ -380,6 +380,8 @@ html:not(.js) .countdown { display: none; }
   font-size: 11px; letter-spacing: 0.34em; text-transform: uppercase; color: var(--brass);
 }
 .hero__strip-rule { flex: none; width: 36px; height: 1px; background: var(--brass); }
+.hero--holding { min-height: calc(100vh - 96px); min-height: calc(100svh - 96px); }
+.site-footer--holding .site-footer__base { padding-top: 28px; }
 
 .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); gap: 18px; }
 .card {

@@ -104,6 +104,16 @@ export function newsletterForm(ctx, variant) {
   </form>`;
 }
 
+// The countdown, opening line and signup: the coming-soon hero on Home and the holding page.
+export function comingSoon(ctx) {
+  return html`<p class="hero__soon-kicker">Coming soon</p>
+    <div class="countdown" role="timer" aria-label="Countdown to opening" data-countdown>
+      ${[['d', 'Days'], ['h', 'Hours'], ['m', 'Minutes'], ['s', 'Seconds']].map(([u, l]) => html`<div class="countdown__cell"><span class="countdown__num" data-unit="${u}">00</span><span class="countdown__label">${l}</span></div>`)}
+    </div>
+    <p class="hero__soon-line">Doors open to the public November 17 at 4 PM. Join the list for first word.</p>
+    ${newsletterForm(ctx, 'hero')}`;
+}
+
 const DOW = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 const MON = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
@@ -190,6 +200,21 @@ function footer(ctx) {
 </footer>`;
 }
 
+// The holding page's footer: where to find us and how to reach us, with no links into the site.
+function holdingFooter(ctx) {
+  const { site } = ctx;
+  return html`<footer class="site-footer site-footer--holding">
+  <div class="site-footer__base">
+    <div class="site-footer__rule"><span></span>${bulb(40, site.flicker)}</div>
+    <div class="site-footer__legal">
+      <span>${site.address.street} · ${site.address.city}</span>
+      <span class="site-footer__legal-links"><a href="${mailHref(ctx)}">${site.email}</a><a href="${mailHref(ctx, 'Private events', site.eventsEmail)}">Private events</a><a href="${site.instagram.url}">Instagram</a></span>
+      <span>© ${ctx.year} The Last Table · ${site.owner}</span>
+    </div>
+  </div>
+</footer>`;
+}
+
 export function layout(ctx, page, body) {
   const { site } = ctx;
   const url = `${ctx.siteUrl}/${page.file === 'index.html' ? '' : page.file}`;
@@ -203,7 +228,7 @@ export function layout(ctx, page, body) {
   };
   const ga = site.googleAnalyticsId;
   return `<!doctype html>
-<html lang="en" data-launch-mode="${site.launch.mode}" data-open-at="${site.launch.openAt}" data-launch="${ctx.launchDefault}">
+<html lang="en" data-launch-mode="${ctx.launchMode}" data-open-at="${site.launch.openAt}" data-launch="${ctx.launchDefault}">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -236,11 +261,11 @@ ${ctx.restaurantJsonLd}${page.jsonld ? `\n${page.jsonld}` : ''}${ga ? `
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','${ga}');</script>` : ''}
 </head>
 <body>
-${header(ctx)}
+${page.holding ? '' : header(ctx)}
 <main id="main" tabindex="-1">
 ${body}
 </main>
-${footer(ctx)}
+${page.holding ? holdingFooter(ctx) : footer(ctx)}
 </body>
 </html>
 `;

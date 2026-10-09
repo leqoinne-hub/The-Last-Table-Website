@@ -1,5 +1,5 @@
 import { html } from '../lib/html.mjs';
-import { href, primaryMark, photo, newsletterForm, eventRows, tonightDefault } from '../lib/components.mjs';
+import { href, primaryMark, photo, comingSoon, eventRows, tonightDefault } from '../lib/components.mjs';
 
 export default {
   id: 'home',
@@ -18,14 +18,7 @@ export default {
     <a class="btn btn--fill" href="${href('reserve')}">Reserve a table</a>
     <a class="btn btn--ghost" href="${href('menus')}">See the menus</a>
   </div>
-  <div class="hero__soon only-coming-soon">
-    <p class="hero__soon-kicker">Coming soon</p>
-    <div class="countdown" role="timer" aria-label="Countdown to opening" data-countdown>
-      ${[['d', 'Days'], ['h', 'Hours'], ['m', 'Minutes'], ['s', 'Seconds']].map(([u, l]) => html`<div class="countdown__cell"><span class="countdown__num" data-unit="${u}">00</span><span class="countdown__label">${l}</span></div>`)}
-    </div>
-    <p class="hero__soon-line">Doors open to the public November 17 at 4 PM. Join the list for first word.</p>
-    ${newsletterForm(ctx, 'hero')}
-  </div>
+  <div class="hero__soon only-coming-soon">${comingSoon(ctx)}</div>
   <p class="hero__strip"><span class="hero__strip-rule"></span><span class="only-coming-soon">${site.launch.label} · ${site.address.cross}</span><span class="only-open">Tonight · <span data-tonight>${tonightDefault(ctx)}</span></span><span class="hero__strip-rule"></span></p>
 </section>
 
