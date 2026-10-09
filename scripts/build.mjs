@@ -1,5 +1,6 @@
 // Builds the static site into dist/ and refreshes the generated Squarespace files.
 // Usage: node scripts/build.mjs   (SITE_URL=https://example.com overrides content/site.js → url)
+//        node scripts/build.mjs --full   builds every page even while the holding page is on
 import { readFileSync, writeFileSync, mkdirSync, rmSync, readdirSync, statSync, copyFileSync, existsSync } from 'node:fs';
 import { join, dirname, relative, extname } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -25,12 +26,17 @@ import careers from '../src/pages/careers.mjs';
 import contact from '../src/pages/contact.mjs';
 import faqPage, { faqJsonLd } from '../src/pages/faq.mjs';
 import { privacy, terms, notFound, draft as legalDraft } from '../src/pages/legal.mjs';
+import { holding as holdingPage, holdingMissing } from '../src/pages/holding.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const ASSETS = join(ROOT, 'src', 'assets');
 const OUT = join(ROOT, 'dist');
 const SQS = join(ROOT, 'squarespace', 'generated');
-const PAGES = [home, menus, reservations, privateDining, liveMusic, ourStory, giftCards, press, careers, contact, faqPage, privacy, terms, notFound];
+// While content/site.js → launch.holding is on, the public site is the coming-soon page alone.
+const holding = site.launch.holding && !process.argv.includes('--full');
+const PAGES = holding
+  ? [holdingPage, holdingMissing]
+  : [home, menus, reservations, privateDining, liveMusic, ourStory, giftCards, press, careers, contact, faqPage, privacy, terms, notFound];
 
 const siteUrl = (process.env.SITE_URL || site.url).replace(/\/+$/, '');
 const todos = new Set();
@@ -63,7 +69,7 @@ function restaurantJsonLd(baseUrl, menuUrl) {
     servesCuisine: ['American', 'Supper Club', 'Cocktails'],
     priceRange: '$$$',
     acceptsReservations: site.resy.url || true,
-    menu: menuUrl,
+    ...(menuUrl ? { menu: menuUrl } : {}),
     sameAs: [site.instagram.url],
     openingHoursSpecification: site.hours.flatMap((h) => h.schema).map((s) => ({
       '@type': 'OpeningHoursSpecification',
@@ -82,6 +88,8 @@ const HEAD_SCRIPT = "(function(d){var c=d.documentElement;c.classList.add('js');
 rmSync(OUT, { recursive: true, force: true });
 for (const file of walk(ASSETS)) {
   if (extname(file) === '.md') continue;
+  // Menu PDFs and photos belong to pages that stay unpublished while holding.
+  if (holding && ['downloads', 'photos'].includes(relative(ASSETS, file).split(/[\\/]/)[0])) continue;
   const dest = join(OUT, 'assets', relative(ASSETS, file));
   mkdirSync(dirname(dest), { recursive: true });
   copyFileSync(file, dest);
@@ -102,12 +110,14 @@ for (const [key, name] of Object.entries(site.downloads)) {
   if (!present) todo(`Download: src/assets/downloads/${name} (its link stays hidden until the file is there)`);
 }
 
-// Press-kit logo ZIP, built from the vector package.
-const { zip } = await import('./lib/zip.mjs');
-const vectorDir = join(ASSETS, 'vector');
-const logoZip = zip(walk(vectorDir).sort().map((f) => ({ name: `The Last Table logos/${relative(vectorDir, f)}`, data: readFileSync(f) })));
-write(join(OUT, 'assets', 'downloads', 'tlt-logo-files.zip'), logoZip);
-downloads.logoZip = 'assets/downloads/tlt-logo-files.zip';
+// Press-kit logo ZIP, built from the vector package (the Press page isn't published while holding).
+if (!holding) {
+  const { zip } = await import('./lib/zip.mjs');
+  const vectorDir = join(ASSETS, 'vector');
+  const logoZip = zip(walk(vectorDir).sort().map((f) => ({ name: `The Last Table logos/${relative(vectorDir, f)}`, data: readFileSync(f) })));
+  write(join(OUT, 'assets', 'downloads', 'tlt-logo-files.zip'), logoZip);
+  downloads.logoZip = 'assets/downloads/tlt-logo-files.zip';
+}
 
 // ---------- what's still needed ----------
 
@@ -129,13 +139,15 @@ const base = {
   site, siteUrl, menuPages, events: eventsSample ? [] : events, faq, roles, photos, photoFiles, downloads, todo,
   year: new Date().getFullYear(),
   primarySvg: join(ASSETS, 'vector', 'primary', 'tlt-primary-linen-transparent.svg'),
-  launchDefault: site.launch.mode === 'auto' ? (Date.now() < openAt ? 'coming-soon' : 'open') : site.launch.mode,
-  headScript: HEAD_SCRIPT,
+  // The holding page is always the coming-soon state; ?launch=open has nothing to show there.
+  launchMode: holding ? 'coming-soon' : site.launch.mode,
+  launchDefault: holding ? 'coming-soon' : site.launch.mode === 'auto' ? (Date.now() < openAt ? 'coming-soon' : 'open') : site.launch.mode,
+  headScript: holding ? "document.documentElement.classList.add('js');" : HEAD_SCRIPT,
   assetVersion: {
     css: hash(readFileSync(join(ASSETS, 'css', 'site.css'))),
     js: hash(readFileSync(join(ASSETS, 'js', 'site.js'))),
   },
-  restaurantJsonLd: jsonScript(restaurantJsonLd(siteUrl, `${siteUrl}/menus.html`)),
+  restaurantJsonLd: jsonScript(restaurantJsonLd(siteUrl, holding ? null : `${siteUrl}/menus.html`)),
 };
 
 for (const page of PAGES) {
@@ -238,7 +250,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
 // ---------- report ----------
 
-console.log(`Built ${PAGES.length} pages into dist/ for ${siteUrl}`);
+console.log(holding
+  ? `Built the holding page only into dist/ for ${siteUrl}: content/site.js → launch.holding is on.\nThe rest of the site stays unpublished. Preview it with \`npm run dev\`.`
+  : `Built ${PAGES.length} pages into dist/ for ${siteUrl}`);
 console.log('Refreshed squarespace/generated/ (menus-code-block, schema-jsonld, header-injection)');
 if (todos.size) {
   const rank = (t) => (t.startsWith('Photo') ? 2 : t.startsWith('Download') ? 1 : 0);
