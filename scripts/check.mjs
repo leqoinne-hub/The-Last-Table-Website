@@ -15,7 +15,8 @@ for (const name of readdirSync(DIST).filter((f) => f.endsWith('.html'))) {
   for (const [, attr, value] of page.matchAll(/\s(href|src|action)="([^"]*)"/g)) {
     if (/^(https?:|mailto:|tel:|data:|#)/.test(value) || value === '') continue;
     const path = value.split(/[?#]/)[0];
-    if (path && !existsSync(join(DIST, path))) fail(`${attr}="${value}" does not exist`);
+    // Like GitHub Pages, a clean address such as `waitlist` is served from waitlist.html.
+    if (path && !existsSync(join(DIST, path)) && !existsSync(join(DIST, `${path}.html`))) fail(`${attr}="${value}" does not exist`);
   }
 
   const ids = [...page.matchAll(/\sid="([^"]+)"/g)].map((m) => m[1]);

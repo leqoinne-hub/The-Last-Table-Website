@@ -22,7 +22,14 @@ npm run dev:public   # exactly what the public gets right now
 
 ## Coming soon only
 
-Until launch, the public site is **the coming-soon page alone**: the logo, the countdown, the signup, and a footer with the address, email, private-events email and Instagram. It has no menu and no links into the site. The other pages aren't published at all, so they can't be browsed or found in search. Any other address, such as an old `/menus.html` link, lands on the countdown too.
+Until launch, the public site is two pages:
+
+- **The coming-soon page**: the logo, the countdown and the waitlist signup.
+- **The waitlist at [thelasttablechicago.com/waitlist](https://www.thelasttablechicago.com/waitlist)**: first name and email for first word on opening night. Use this address on Instagram, flyers and QR codes.
+
+Both pages share a footer with the address, email, private-events email and Instagram. There is no menu and no link into the rest of the site. The other pages aren't published at all, so they can't be browsed or found in search. Any other address, such as an old `/menus.html` link, lands on the countdown.
+
+Signups from both pages go to `forms.newsletter` in `content/site.js`. Until that's set, they open the guest's email app addressed to info@thelasttablechicago.com.
 
 To publish the full site, set `holding: false` under `launch` in `content/site.js` and push to `main`.
 
