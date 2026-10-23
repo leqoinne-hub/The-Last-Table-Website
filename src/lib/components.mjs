@@ -6,6 +6,7 @@ export const NAV = [
   { id: 'home', file: 'index.html', label: 'Home' },
   { id: 'menus', file: 'menus.html', label: 'Menus' },
   { id: 'reserve', file: 'reservations.html', label: 'Reservations' },
+  { id: 'waitlist', file: 'waitlist', label: 'Waitlist' },
   { id: 'private', file: 'private-dining.html', label: 'Private Dining' },
   { id: 'music', file: 'live-music.html', label: 'Live Music' },
   { id: 'story', file: 'our-story.html', label: 'Our Story' },
@@ -16,6 +17,8 @@ export const NAV = [
   { id: 'faq', file: 'faq.html', label: 'FAQ' },
 ];
 export const href = (id) => NAV.find((n) => n.id === id).file;
+// A page's address under the site root: '' for home, `path` for clean addresses like /waitlist.
+export const pagePath = (page) => page.path ?? (page.file === 'index.html' ? '' : page.file);
 
 // ---------- Logo marks ----------
 
@@ -87,19 +90,20 @@ export function mailHref(ctx, subject, to = ctx.site.email) {
 }
 
 let formN = 0;
-export function newsletterForm(ctx, variant) {
+// `list` names what guests join: 'list' (the newsletter) or 'waitlist' (before opening).
+export function newsletterForm(ctx, variant, { list = 'list', done } = {}) {
   const n = ++formN;
-  const action = ctx.site.forms.newsletter || mailHref(ctx, 'Join the list');
+  const action = ctx.site.forms.newsletter || mailHref(ctx, `Join the ${list}`);
   const hero = variant === 'hero';
-  return html`<form class="signup signup--${variant}" data-form="newsletter" action="${action}" method="post"${ctx.site.forms.newsletter ? '' : raw(' enctype="text/plain"')} novalidate>
+  return html`<form class="signup signup--${variant}" data-form="newsletter" data-list="${list}" action="${action}" method="post"${ctx.site.forms.newsletter ? '' : raw(' enctype="text/plain"')} novalidate>
     <div class="signup__row">
       <label class="visually-hidden" for="nl-${n}">${hero ? 'Email' : 'Email for newsletter'}</label>
       <input id="nl-${n}" type="email" name="email" placeholder="Your email" autocomplete="email" required aria-describedby="nl-${n}-err">
       <input class="hp" type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true">
-      <button type="submit">${hero ? 'Join the list' : 'Join'}</button>
+      <button type="submit">${hero ? `Join the ${list}` : 'Join'}</button>
     </div>
     <p class="form-error" id="nl-${n}-err" hidden>Please add a valid email.</p>
-    <p class="signup__done" role="status" data-done="${hero ? "You're on the list. We'll save you a seat." : "You're on the list."}"></p>
+    <p class="signup__done" role="status" data-done="${done || (hero ? "You're on the list. We'll save you a seat." : "You're on the list.")}"></p>
     ${hero ? html`<p class="fine">News and invitations only. Unsubscribe anytime.</p>` : ''}
   </form>`;
 }
@@ -110,8 +114,8 @@ export function comingSoon(ctx) {
     <div class="countdown" role="timer" aria-label="Countdown to opening" data-countdown>
       ${[['d', 'Days'], ['h', 'Hours'], ['m', 'Minutes'], ['s', 'Seconds']].map(([u, l]) => html`<div class="countdown__cell"><span class="countdown__num" data-unit="${u}">00</span><span class="countdown__label">${l}</span></div>`)}
     </div>
-    <p class="hero__soon-line">Doors open to the public November 17 at 4 PM. Join the list for first word.</p>
-    ${newsletterForm(ctx, 'hero')}`;
+    <p class="hero__soon-line">Doors open to the public November 17 at 4 PM. Join the waitlist for first word.</p>
+    ${newsletterForm(ctx, 'hero', { list: 'waitlist', done: "You're on the waitlist. First word comes to you." })}`;
 }
 
 const DOW = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
@@ -208,7 +212,7 @@ function holdingFooter(ctx) {
     <div class="site-footer__rule"><span></span>${bulb(40, site.flicker)}</div>
     <div class="site-footer__legal">
       <span>${site.address.street} · ${site.address.city}</span>
-      <span class="site-footer__legal-links"><a href="${mailHref(ctx)}">${site.email}</a><a href="${mailHref(ctx, 'Private events', site.eventsEmail)}">Private events</a><a href="${site.instagram.url}">Instagram</a></span>
+      <span class="site-footer__legal-links"><a href="${href('waitlist')}"${ctx.page === 'waitlist' ? raw(' aria-current="page"') : ''}>Waitlist</a><a href="${mailHref(ctx)}">${site.email}</a><a href="${mailHref(ctx, 'Private events', site.eventsEmail)}">Private events</a><a href="${site.instagram.url}">Instagram</a></span>
       <span>© ${ctx.year} The Last Table · ${site.owner}</span>
     </div>
   </div>
@@ -217,7 +221,7 @@ function holdingFooter(ctx) {
 
 export function layout(ctx, page, body) {
   const { site } = ctx;
-  const url = `${ctx.siteUrl}/${page.file === 'index.html' ? '' : page.file}`;
+  const url = `${ctx.siteUrl}/${pagePath(page)}`;
   const og = `${ctx.siteUrl}/assets/icons/og-image.png`;
   const config = {
     openAt: site.launch.openAt,

@@ -12,11 +12,12 @@ import { events, sample as eventsSample } from '../content/events.js';
 import { faq, policiesApproved } from '../content/faq.js';
 import { roles, placeholder as rolesPlaceholder } from '../content/careers.js';
 import { photos } from '../content/photos.js';
-import { layout, resetIds } from '../src/lib/components.mjs';
+import { layout, resetIds, pagePath } from '../src/lib/components.mjs';
 import { menuPanel, menuTabs, TABS } from '../src/lib/menus.mjs';
 import home from '../src/pages/home.mjs';
 import menus from '../src/pages/menus.mjs';
 import reservations from '../src/pages/reservations.mjs';
+import waitlist from '../src/pages/waitlist.mjs';
 import privateDining from '../src/pages/private-dining.mjs';
 import liveMusic from '../src/pages/live-music.mjs';
 import ourStory from '../src/pages/our-story.mjs';
@@ -32,11 +33,11 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const ASSETS = join(ROOT, 'src', 'assets');
 const OUT = join(ROOT, 'dist');
 const SQS = join(ROOT, 'squarespace', 'generated');
-// While content/site.js → launch.holding is on, the public site is the coming-soon page alone.
+// While content/site.js → launch.holding is on, the public site is the coming-soon page and the waitlist.
 const holding = site.launch.holding && !process.argv.includes('--full');
 const PAGES = holding
-  ? [holdingPage, holdingMissing]
-  : [home, menus, reservations, privateDining, liveMusic, ourStory, giftCards, press, careers, contact, faqPage, privacy, terms, notFound];
+  ? [holdingPage, { ...waitlist, holding: true }, holdingMissing]
+  : [home, menus, reservations, waitlist, privateDining, liveMusic, ourStory, giftCards, press, careers, contact, faqPage, privacy, terms, notFound];
 
 const siteUrl = (process.env.SITE_URL || site.url).replace(/\/+$/, '');
 const todos = new Set();
@@ -136,7 +137,7 @@ if (legalDraft) todo('Have counsel review the draft Privacy and Terms pages (src
 
 const openAt = Date.parse(site.launch.openAt);
 const base = {
-  site, siteUrl, menuPages, events: eventsSample ? [] : events, faq, roles, photos, photoFiles, downloads, todo,
+  site, siteUrl, holding, menuPages, events: eventsSample ? [] : events, faq, roles, photos, photoFiles, downloads, todo,
   year: new Date().getFullYear(),
   primarySvg: join(ASSETS, 'vector', 'primary', 'tlt-primary-linen-transparent.svg'),
   // The holding page is always the coming-soon state; ?launch=open has nothing to show there.
@@ -164,7 +165,7 @@ for (const page of PAGES) {
 
 write(join(OUT, 'sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${PAGES.filter((p) => !p.noindex).map((p) => `  <url><loc>${siteUrl}/${p.file === 'index.html' ? '' : p.file}</loc></url>`).join('\n')}
+${PAGES.filter((p) => !p.noindex).map((p) => `  <url><loc>${siteUrl}/${pagePath(p)}</loc></url>`).join('\n')}
 </urlset>
 `);
 write(join(OUT, 'robots.txt'), `User-agent: *\nAllow: /\n\nSitemap: ${siteUrl}/sitemap.xml\n`);
@@ -251,7 +252,7 @@ document.addEventListener('DOMContentLoaded', function () {
 // ---------- report ----------
 
 console.log(holding
-  ? `Built the holding page only into dist/ for ${siteUrl}: content/site.js → launch.holding is on.\nThe rest of the site stays unpublished. Preview it with \`npm run dev\`.`
+  ? `Built the holding page and the waitlist into dist/ for ${siteUrl}: content/site.js → launch.holding is on.\nThe rest of the site stays unpublished. Preview it with \`npm run dev\`.`
   : `Built ${PAGES.length} pages into dist/ for ${siteUrl}`);
 console.log('Refreshed squarespace/generated/ (menus-code-block, schema-jsonld, header-injection)');
 if (todos.size) {

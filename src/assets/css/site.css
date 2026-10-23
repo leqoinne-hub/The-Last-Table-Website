@@ -383,6 +383,20 @@ html:not(.js) .countdown { display: none; }
 .hero--holding { min-height: calc(100vh - 96px); min-height: calc(100svh - 96px); }
 .site-footer--holding .site-footer__base { padding-top: 28px; }
 
+/* ---------- Waitlist ---------- */
+
+.waitlist { min-height: calc(100vh - 96px); min-height: calc(100svh - 96px); display: flex; align-items: center; }
+.waitlist__inner { display: flex; flex-direction: column; align-items: center; gap: 0; width: 100%; padding-block: clamp(56px, 9vh, 104px); text-align: center; }
+.waitlist__mark { display: block; width: min(420px, 82%); margin-bottom: clamp(40px, 7vh, 64px); }
+.waitlist__mark img { display: block; width: 100%; height: auto; }
+.waitlist__title { color: var(--linen); }
+.waitlist__lede { margin: 0 auto 40px; }
+.waitlist__form { display: flex; flex-direction: column; align-items: stretch; gap: 26px; width: min(560px, 100%); margin-bottom: clamp(40px, 7vh, 64px); text-align: left; }
+.waitlist__form .btn { align-self: center; min-width: min(280px, 100%); }
+.waitlist__form .fine { margin-top: -10px; text-align: center; }
+.waitlist__form .signup__done { text-align: center; }
+.waitlist__form.is-done .field-row, .waitlist__form.is-done .btn, .waitlist__form.is-done .fine { display: none; }
+
 .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); gap: 18px; }
 .card {
   display: flex; flex-direction: column; gap: 16px;

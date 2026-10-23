@@ -155,12 +155,14 @@
       if (!EMAIL_RE.test(email)) { setError(input, err, true); input.focus(); return; }
       setError(input, err, false);
       var finish = function (msg) { form.classList.add('is-done'); done.textContent = msg; };
+      var list = form.getAttribute('data-list') || 'list';
+      var name = form.elements.first_name ? form.elements.first_name.value.trim() : '';
       if (config.forms && config.forms.newsletter) {
         post(config.forms.newsletter, form).then(function () { finish(done.getAttribute('data-done')); })
           .catch(function () { err.textContent = 'That didn’t go through. Please try again, or write to ' + config.email + '.'; err.hidden = false; });
       } else {
-        mailto(config.email, 'Join the list', 'Please add ' + email + ' to The Last Table list.');
-        finish('Your email app should open. Send the message and you’re on the list.');
+        mailto(config.email, 'Join the ' + list, 'Please add ' + (name ? name + ' (' + email + ')' : email) + ' to The Last Table ' + list + '.');
+        finish('Your email app should open. Send the message and you’re on the ' + list + '.');
       }
     });
   });
