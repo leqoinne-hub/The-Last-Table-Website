@@ -17,6 +17,10 @@ export const NAV = [
   { id: 'faq', file: 'faq.html', label: 'FAQ' },
 ];
 export const href = (id) => NAV.find((n) => n.id === id).file;
+// The opening date as it reads on the site, from content/site.js → launch.
+export const opensLabel = (site) => `${site.launch.date} · ${site.launch.time}`;
+export const opensOn = (site) => `${site.launch.date} at ${site.launch.time}`;
+
 // A page's address under the site root: '' for home, `path` for clean addresses like /waitlist.
 export const pagePath = (page) => page.path ?? (page.file === 'index.html' ? '' : page.file);
 
@@ -114,7 +118,7 @@ export function comingSoon(ctx) {
     <div class="countdown" role="timer" aria-label="Countdown to opening" data-countdown>
       ${[['d', 'Days'], ['h', 'Hours'], ['m', 'Minutes'], ['s', 'Seconds']].map(([u, l]) => html`<div class="countdown__cell"><span class="countdown__num" data-unit="${u}">00</span><span class="countdown__label">${l}</span></div>`)}
     </div>
-    <p class="hero__soon-line">Doors open to the public November 17 at 4 PM. Join the waitlist for first word.</p>
+    <p class="hero__soon-line">Doors open to the public ${opensOn(ctx.site)}. Join the waitlist for first word.</p>
     ${newsletterForm(ctx, 'hero', { list: 'waitlist', done: "You're on the waitlist. First word comes to you." })}`;
 }
 

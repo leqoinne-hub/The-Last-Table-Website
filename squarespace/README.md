@@ -9,7 +9,7 @@ Build the rest with native blocks (Form, Newsletter, Events, Map, Accordion, Ins
 | `generated/header-injection.html` | Settings → Advanced → Code Injection → **Header**. It loads the fonts and runs tonight's hours and the menu tabs. |
 | `generated/schema-jsonld.html` | **First block** (Restaurant) → Code Injection → Header. **Second block** (FAQPage) → the FAQ page's settings → Advanced → Page Header Code Injection. |
 | `hero-code-block.html` | Home → a Code block in the hero. This is the logo with the flickering bulb. |
-| `countdown-code-block.html` | Home → a Code block under the hero until opening. It hides itself at 4 PM on November 17. |
+| `countdown-code-block.html` | Home → a Code block under the hero until opening. It hides itself at 4 PM on December 3. |
 | `generated/menus-code-block.html` | Menus → one Code block. It holds the DINNER · BAR · BRUNCH tabs with every menu pre-rendered. |
 
 ## Email routing

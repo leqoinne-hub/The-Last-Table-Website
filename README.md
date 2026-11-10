@@ -17,7 +17,7 @@ npm run dev          # the whole site, served at http://localhost:8080
 npm run dev:public   # exactly what the public gets right now
 ```
 
-- Add `?launch=open` to any page to see the site as it will look after opening. Until November 17 at 4 PM CT the home page shows the countdown, and then it switches on its own.
+- Add `?launch=open` to any page to see the site as it will look after opening. Until the opening (December 3 at 4 PM CT; `launch` in `content/site.js`) the home page shows the countdown, and then it switches on its own.
 - `npm run check` builds both versions and checks every page for broken links, missing alt text, duplicate IDs, a single H1 and structured-data errors.
 
 ## Coming soon only
