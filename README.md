@@ -24,10 +24,10 @@ npm run dev:public   # exactly what the public gets right now
 
 Until launch, the public site is two pages:
 
-- **The coming-soon page**: the logo, the countdown and the waitlist signup.
+- **The coming-soon page**: the logo, "Coming soon" and the waitlist signup. With `showDate: false` under `launch` in `content/site.js`, no date or countdown appears anywhere. Set it to `true` once the opening date is firm, and the countdown and "Doors open…" line come back.
 - **The waitlist at [thelasttablechicago.com/waitlist](https://www.thelasttablechicago.com/waitlist)**: first name and email for first word on opening night. Use this address on Instagram, flyers and QR codes.
 
-Both pages share a footer with the address, email, private-events email and Instagram. There is no menu and no link into the rest of the site. The other pages aren't published at all, so they can't be browsed or found in search. Any other address, such as an old `/menus.html` link, lands on the countdown.
+Both pages share a footer with the address, email, private-events email and Instagram. There is no menu and no link into the rest of the site. The other pages aren't published at all, so they can't be browsed or found in search. Any other address, such as an old `/menus.html` link, lands on the coming-soon page.
 
 Signups from both pages go to `forms.newsletter` in `content/site.js`. Until that's set, they open the guest's email app addressed to info@thelasttablechicago.com.
 

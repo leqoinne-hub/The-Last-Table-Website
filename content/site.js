@@ -34,7 +34,8 @@ export const site = {
   // every other page stays unpublished. Set it to false to publish the full site.
   // openAt is the exact opening moment in Chicago time (-06:00 in winter, -05:00 in summer); `date` and
   // `time` are how it reads on the site. Change all three together.
-  launch: { mode: 'auto', openAt: '2026-12-03T16:00:00-06:00', date: 'December 3', time: '4 PM', holding: true },
+  // showDate: false keeps the date off the site entirely: no countdown, no date, just "Coming soon".
+  launch: { mode: 'auto', openAt: '2026-12-03T16:00:00-06:00', date: 'December 3', time: '4 PM', showDate: false, holding: true },
   flicker: true,
 
   // Hours, as shown on the site. `schema` feeds the Google structured data.
