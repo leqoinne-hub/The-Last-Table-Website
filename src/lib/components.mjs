@@ -264,7 +264,7 @@ ${page.noindex ? '<meta name="robots" content="noindex">\n' : ''}<link rel="icon
 <script>${ctx.headScript}</script>
 <script type="application/json" id="tlt-config">${JSON.stringify(config).replace(/</g, '\\u003c')}</script>
 <script src="assets/js/site.js?v=${ctx.assetVersion.js}" defer></script>
-${ctx.restaurantJsonLd}${page.jsonld ? `\n${page.jsonld}` : ''}${ga ? `
+${site.inkind ? '<script src="https://inkindscript.com/inkind.js" async></script>\n' : ''}${ctx.restaurantJsonLd}${page.jsonld ? `\n${page.jsonld}` : ''}${ga ? `
 <script async src="https://www.googletagmanager.com/gtag/js?id=${ga}"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','${ga}');</script>` : ''}
 </head>

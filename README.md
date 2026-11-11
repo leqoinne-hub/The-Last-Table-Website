@@ -39,7 +39,7 @@ Edit the files in `content/`, then run `npm run build`. Every page and the Squar
 
 | To change… | Edit |
 |---|---|
-| Hours, address, phone, email, Resy/Toast links, form endpoints, launch time, private-dining spaces | `content/site.js` |
+| Hours, address, phone, email, Resy/Toast links, form endpoints, launch time, private-dining spaces, the inKind popup (`inkind`) | `content/site.js` |
 | Dinner, bar and brunch menus (also the source for the print menus) | `content/menu-data.js` |
 | Live music calendar | `content/events.js` (past nights hide themselves) |
 | FAQ / house notes | `content/faq.js` |

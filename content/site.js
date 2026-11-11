@@ -76,5 +76,6 @@ export const site = {
     { name: 'After-ten reception', standing: null, desc: 'Cocktails, passed bites and the late set, from ten until close.' },
   ],
 
+  inkind: true, // inKind's popup (dining-credit offers), loaded from inkindscript.com on every page. false removes it.
   googleAnalyticsId: null, // e.g. 'G-XXXXXXX'. Add a cookie banner before turning on analytics or ad pixels.
 };

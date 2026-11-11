@@ -20,7 +20,7 @@ export const privacy = {
     <h2>How we use it</h2>
     <p>To answer you, plan your event, and send the news and invitations you asked for. We don't sell or rent your information.</p>
     <h2>Services we use</h2>
-    <p>Reservations run through Resy and gift cards through Toast; their own privacy policies apply when you use them. Our contact page shows a Google map, and our type comes from Google Fonts. These services may log your visit or set their own cookies.</p>
+    <p>Reservations run through Resy and gift cards through Toast; their own privacy policies apply when you use them. Our contact page shows a Google map, and our type comes from Google Fonts.${site.inkind ? ' Our pages load inKind, which may show you offers for dining credit at The Last Table; inKind\'s own privacy policy applies if you use them.' : ''} These services may log your visit or set their own cookies.</p>
     <h2>Our list</h2>
     <p>Every email includes a way to unsubscribe, or write to us and we'll take you off.</p>
     <h2>Your choices</h2>
