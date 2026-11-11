@@ -203,7 +203,7 @@ ${jsonScript(faqJsonLd(faq))}
 `);
 
 const tonightJs = JSON.stringify(site.tonight);
-write(join(SQS, 'header-injection.html'), `${GEN('Settings → Advanced → Code Injection → Header. Fonts, tonight\'s hours and the menu tabs.')}<link rel="preconnect" href="https://fonts.googleapis.com">
+write(join(SQS, 'header-injection.html'), `${GEN('Settings → Advanced → Code Injection → Header. Fonts, tonight\'s hours and the menu tabs.')}${site.inkind ? '<script src="https://inkindscript.com/inkind.js" async></script>\n' : ''}<link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Limelight&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..700&family=Jost:wght@400;500;600&display=swap" rel="stylesheet">
 <script>
