@@ -19,7 +19,7 @@ export default {
     <a class="btn btn--ghost" href="${href('menus')}">See the menus</a>
   </div>
   <div class="hero__soon only-coming-soon">${comingSoon(ctx)}</div>
-  <p class="hero__strip"><span class="hero__strip-rule"></span><span class="only-coming-soon">${opensLabel(site)} · ${site.address.cross}</span><span class="only-open">Tonight · <span data-tonight>${tonightDefault(ctx)}</span></span><span class="hero__strip-rule"></span></p>
+  <p class="hero__strip"><span class="hero__strip-rule"></span><span class="only-coming-soon">${site.launch.showDate ? opensLabel(site) : 'Coming soon'} · ${site.address.cross}</span><span class="only-open">Tonight · <span data-tonight>${tonightDefault(ctx)}</span></span><span class="hero__strip-rule"></span></p>
 </section>
 
 <section class="ground-linen">

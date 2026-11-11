@@ -19,6 +19,10 @@ export const NAV = [
 export const href = (id) => NAV.find((n) => n.id === id).file;
 // The opening date as it reads on the site, from content/site.js → launch.
 export const opensLabel = (site) => `${site.launch.date} · ${site.launch.time}`;
+// The strip under the coming-soon hero: the date and corner when announced, nothing otherwise.
+export const opensStrip = (site) => (site.launch.showDate
+  ? html`<p class="hero__strip"><span class="hero__strip-rule"></span><span>${opensLabel(site)} · ${site.address.cross}</span><span class="hero__strip-rule"></span></p>`
+  : '');
 export const opensOn = (site) => `${site.launch.date} at ${site.launch.time}`;
 
 // A page's address under the site root: '' for home, `path` for clean addresses like /waitlist.
@@ -112,14 +116,20 @@ export function newsletterForm(ctx, variant, { list = 'list', done } = {}) {
   </form>`;
 }
 
-// The countdown, opening line and signup: the coming-soon hero on Home and the holding page.
+// The coming-soon hero on Home and the holding page: the countdown and opening line when the date is
+// announced (launch.showDate), otherwise just "Coming soon"; the waitlist signup either way.
 export function comingSoon(ctx) {
+  const waitlist = newsletterForm(ctx, 'hero', { list: 'waitlist', done: "You're on the waitlist. First word comes to you." });
+  if (!ctx.site.launch.showDate) {
+    return html`<p class="hero__soon-title">Coming soon</p>
+    ${waitlist}`;
+  }
   return html`<p class="hero__soon-kicker">Coming soon</p>
     <div class="countdown" role="timer" aria-label="Countdown to opening" data-countdown>
       ${[['d', 'Days'], ['h', 'Hours'], ['m', 'Minutes'], ['s', 'Seconds']].map(([u, l]) => html`<div class="countdown__cell"><span class="countdown__num" data-unit="${u}">00</span><span class="countdown__label">${l}</span></div>`)}
     </div>
     <p class="hero__soon-line">Doors open to the public ${opensOn(ctx.site)}. Join the waitlist for first word.</p>
-    ${newsletterForm(ctx, 'hero', { list: 'waitlist', done: "You're on the waitlist. First word comes to you." })}`;
+    ${waitlist}`;
 }
 
 const DOW = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
@@ -227,8 +237,10 @@ export function layout(ctx, page, body) {
   const { site } = ctx;
   const url = `${ctx.siteUrl}/${pagePath(page)}`;
   const og = `${ctx.siteUrl}/assets/icons/og-image.png`;
+  // While holding with the date unannounced, the opening moment stays out of the page source too.
+  const openAt = ctx.holding && !site.launch.showDate ? null : site.launch.openAt;
   const config = {
-    openAt: site.launch.openAt,
+    ...(openAt ? { openAt } : {}),
     tonight: site.tonight,
     email: site.email,
     eventsEmail: site.eventsEmail,
@@ -236,7 +248,7 @@ export function layout(ctx, page, body) {
   };
   const ga = site.googleAnalyticsId;
   return `<!doctype html>
-<html lang="en" data-launch-mode="${ctx.launchMode}" data-open-at="${site.launch.openAt}" data-launch="${ctx.launchDefault}">
+<html lang="en" data-launch-mode="${ctx.launchMode}"${openAt ? ` data-open-at="${openAt}"` : ''} data-launch="${ctx.launchDefault}">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
