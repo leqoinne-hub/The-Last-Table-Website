@@ -1,7 +1,7 @@
 // The waitlist at /waitlist: first name and email for first word on opening night. Published with
 // the holding page before launch (with the logo, since that page has no header) and in the menu after.
 import { html, raw } from '../lib/html.mjs';
-import { mailHref, opensStrip, opensOn } from '../lib/components.mjs';
+import { mailHref, opensStrip, opensOn, signupSource } from '../lib/components.mjs';
 import { site } from '../../content/site.js';
 
 export default {
@@ -32,6 +32,7 @@ export default {
         </div>
       </div>
       <input class="hp" type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <input type="hidden" name="source" value="${signupSource(ctx)}">
       <button class="btn btn--fill" type="submit">Join the waitlist</button>
       <p class="signup__done" role="status" data-done="You're on the waitlist. First word comes to you."></p>
       <p class="fine">News and invitations only. Unsubscribe anytime.</p>

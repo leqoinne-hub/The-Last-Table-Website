@@ -59,6 +59,7 @@ export const site = {
   toast: { giftCardUrl: null }, // the Toast gift-card page; both gift-card buttons use it
 
   // Form endpoints that accept a POST of form fields (Formspree, Basin, Getform…).
+  // newsletter: the Google Sheet waitlist's web-app URL (integrations/google-sheets/README.md).
   // Without one, the form opens the guest's email app: the newsletter to `email`, inquiries to `eventsEmail`.
   forms: { newsletter: null, inquiry: null },
 
