@@ -98,6 +98,12 @@ export function mailHref(ctx, subject, to = ctx.site.email) {
 }
 
 let formN = 0;
+// Where a signup came from, as the waitlist sheet's "Signed up from" column shows it.
+export function signupSource(ctx, variant) {
+  const page = ctx.page === '404' ? 'Old link' : ctx.holding && ctx.page === 'home' ? 'Coming-soon page' : `${NAV.find((n) => n.id === ctx.page)?.label || ctx.page[0].toUpperCase() + ctx.page.slice(1)} page`;
+  return variant === 'footer' ? `${page} (footer)` : page;
+}
+
 // `list` names what guests join: 'list' (the newsletter) or 'waitlist' (before opening).
 export function newsletterForm(ctx, variant, { list = 'list', done } = {}) {
   const n = ++formN;
@@ -108,6 +114,7 @@ export function newsletterForm(ctx, variant, { list = 'list', done } = {}) {
       <label class="visually-hidden" for="nl-${n}">${hero ? 'Email' : 'Email for newsletter'}</label>
       <input id="nl-${n}" type="email" name="email" placeholder="Your email" autocomplete="email" required aria-describedby="nl-${n}-err">
       <input class="hp" type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <input type="hidden" name="source" value="${signupSource(ctx, variant)}">
       <button type="submit">${hero ? `Join the ${list}` : 'Join'}</button>
     </div>
     <p class="form-error" id="nl-${n}-err" hidden>Please add a valid email.</p>
