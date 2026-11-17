@@ -69,7 +69,7 @@ function restaurantJsonLd(baseUrl, menuUrl) {
     address: { '@type': 'PostalAddress', streetAddress: a.street, addressLocality: a.city, addressRegion: a.region, postalCode: a.postal, addressCountry: 'US' },
     servesCuisine: ['American', 'Supper Club', 'Cocktails'],
     priceRange: '$$$',
-    acceptsReservations: site.resy.url || true,
+    acceptsReservations: site.reservations.url || true,
     ...(menuUrl ? { menu: menuUrl } : {}),
     sameAs: [site.instagram.url],
     openingHoursSpecification: site.hours.flatMap((h) => h.schema).map((s) => ({
@@ -123,8 +123,8 @@ if (!holding) {
 // ---------- what's still needed ----------
 
 if (!site.phone) todo('Phone number (content/site.js → phone)');
-if (!site.resy.url) todo('Resy venue link (content/site.js → resy.url); until then the Reservations page invites guests to join the list');
-if (!site.resy.embedHtml) todo('Resy booking-widget code, optional (content/site.js → resy.embedHtml)');
+if (!site.reservations.url) todo(`${site.reservations.provider} link (content/site.js → reservations.url); until then the booking buttons stay hidden and the Reservations page invites guests to join the list`);
+if (!site.reservations.widgetHtml) todo(`${site.reservations.provider} booking-widget code, optional (content/site.js → reservations.widgetHtml)`);
 if (!site.toast.giftCardUrl) todo('Toast gift-card link (content/site.js → toast.giftCardUrl); until then the page says gift cards go on sale soon');
 if (!site.forms.newsletter) todo('Newsletter form endpoint (content/site.js → forms.newsletter); until then, signups open the guest\'s email app');
 if (!site.forms.inquiry) todo('Private dining form endpoint (content/site.js → forms.inquiry); until then, inquiries open the guest\'s email app');

@@ -123,12 +123,23 @@ export function newsletterForm(ctx, variant, { list = 'list', done } = {}) {
   </form>`;
 }
 
+// "Reserve on OpenTable", once content/site.js → reservations.url is set.
+export function bookButton(ctx, label = `Reserve on ${ctx.site.reservations.provider}`) {
+  return ctx.site.reservations.url ? html`<a class="btn btn--fill" href="${ctx.site.reservations.url}">${label}</a>` : '';
+}
+
 // The coming-soon hero on Home and the holding page: the countdown and opening line when the date is
-// announced (launch.showDate), otherwise just "Coming soon"; the waitlist signup either way.
+// announced (launch.showDate), otherwise just "Coming soon"; the booking button once reservations are
+// open; the waitlist signup either way.
 export function comingSoon(ctx) {
+  const { reservations } = ctx.site;
+  const book = reservations.url
+    ? html`<div class="hero__book"><p class="hero__soon-line">Book your reservation now through ${reservations.provider}.</p>${bookButton(ctx)}</div>`
+    : '';
   const waitlist = newsletterForm(ctx, 'hero', { list: 'waitlist', done: "You're on the waitlist. First word comes to you." });
   if (!ctx.site.launch.showDate) {
     return html`<p class="hero__soon-title">Coming soon</p>
+    ${book}
     ${waitlist}`;
   }
   return html`<p class="hero__soon-kicker">Coming soon</p>
@@ -136,6 +147,7 @@ export function comingSoon(ctx) {
       ${[['d', 'Days'], ['h', 'Hours'], ['m', 'Minutes'], ['s', 'Seconds']].map(([u, l]) => html`<div class="countdown__cell"><span class="countdown__num" data-unit="${u}">00</span><span class="countdown__label">${l}</span></div>`)}
     </div>
     <p class="hero__soon-line">Doors open to the public ${opensOn(ctx.site)}. Join the waitlist for first word.</p>
+    ${book}
     ${waitlist}`;
 }
 

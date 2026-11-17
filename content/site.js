@@ -52,9 +52,12 @@ export const site = {
     '4 PM – 4 AM', '4 PM – 4 AM',
   ],
 
-  resy: {
-    url: null, // the venue page on Resy; the "Find a table" button links here
-    embedHtml: null, // paste the booking-widget code from the Resy dashboard here to replace the button panel
+  // Reservations. url: the restaurant's OpenTable page; every "Reserve on OpenTable" button links there,
+  // including the one on the coming-soon page. The buttons stay hidden until it's set.
+  reservations: {
+    provider: 'OpenTable',
+    url: null,
+    widgetHtml: null, // optional: OpenTable's booking-widget code, shown on the Reservations page instead of the button
   },
   toast: { giftCardUrl: null }, // the Toast gift-card page; both gift-card buttons use it
 

@@ -365,6 +365,9 @@ html[data-launch="coming-soon"] .only-open { display: none !important; }
 }
 .hero__title { width: min(900px, 100%); margin: 0; }
 .hero__soon { display: flex; flex-direction: column; align-items: center; gap: 26px; width: min(600px, 100%); }
+.hero__book { display: flex; flex-direction: column; align-items: center; gap: 18px; width: 100%; padding-bottom: 8px; }
+.hero__book .btn { min-width: min(300px, 100%); }
+.waitlist__book { margin: 0 0 clamp(40px, 7vh, 64px); font-family: var(--serif); font-style: italic; font-size: 19px; color: var(--linen-muted); }
 .hero__soon-title { margin: 0; font-family: var(--display); font-size: clamp(34px, 5vw, 56px); line-height: 1.05; letter-spacing: 0.04em; color: var(--linen); }
 .hero__soon-kicker { padding-left: 0.4em; font-size: 12px; font-weight: 600; letter-spacing: 0.4em; text-transform: uppercase; color: var(--brass); }
 .hero__soon-line { font-family: var(--serif); font-style: italic; font-size: clamp(22px, 2.6vw, 30px); line-height: 1.35; color: var(--linen); text-wrap: pretty; }
@@ -483,14 +486,14 @@ html:not(.js) .tlt-tabs { display: none; }
 
 /* ---------- Reservations ---------- */
 
-.resy {
+.booking {
   min-height: 440px; padding: 32px;
   display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px;
   border: 1px dashed var(--brass); text-align: center;
 }
-.resy--live { border-style: solid; border-color: var(--rule-card); }
-.resy__line { max-width: 320px; font-family: var(--serif); font-style: italic; font-size: 18px; color: var(--linen-muted); }
-.resy .label { margin: 0; }
+.booking--live { border-style: solid; border-color: var(--rule-card); }
+.booking__line { max-width: 320px; font-family: var(--serif); font-style: italic; font-size: 18px; color: var(--linen-muted); }
+.booking .label { margin: 0; }
 .notes { display: flex; flex-direction: column; gap: 28px; }
 .note { padding-bottom: 24px; border-bottom: 1px solid var(--rule-card); }
 .note:last-child { padding-bottom: 0; border-bottom: 0; }
