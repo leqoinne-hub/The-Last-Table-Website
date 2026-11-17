@@ -37,6 +37,7 @@ export default {
       <p class="signup__done" role="status" data-done="You're on the waitlist. First word comes to you."></p>
       <p class="fine">News and invitations only. Unsubscribe anytime.</p>
     </form>
+    ${site.reservations.url ? html`<p class="waitlist__book">Ready to book? <a class="inline-link" href="${site.reservations.url}">Reserve on ${site.reservations.provider}</a></p>` : ''}
     ${opensStrip(site)}
   </div>
 </section>`;

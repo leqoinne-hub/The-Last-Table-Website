@@ -39,7 +39,7 @@ Edit the files in `content/`, then run `npm run build`. Every page and the Squar
 
 | To change… | Edit |
 |---|---|
-| Hours, address, phone, email, Resy/Toast links, form endpoints, launch time, private-dining spaces, the inKind popup (`inkind`) | `content/site.js` |
+| Hours, address, phone, email, OpenTable/Toast links, form endpoints, launch time, private-dining spaces, the inKind popup (`inkind`) | `content/site.js` |
 | Dinner, bar and brunch menus (also the source for the print menus) | `content/menu-data.js` |
 | Live music calendar | `content/events.js` (past nights hide themselves) |
 | FAQ / house notes | `content/faq.js` |
@@ -64,7 +64,7 @@ Squarespace handles forms natively. On the static site, set `forms.newsletter` a
 ## Still needed from ownership
 The build lists these live. The full list is:
 
-- Phone number · Resy venue link (and widget code, optional) · Toast gift-card link
+- Phone number · OpenTable link (and widget code, optional) · Toast gift-card link
 - Room capacities (fire-marshal numbers) · events packet PDF · dinner, bar and brand PDFs
 - Photography (10 slots; `src/assets/photos/README.md` lists the shots) · brunch food menu · food prices
 - Live music schedule (the calendar holds sample nights) · open roles (placeholders, confirm with HR)
@@ -81,7 +81,7 @@ These are places where the build departs from, or fills a gap in, the handoff. E
 - **Ready for the public.** Anything still missing degrades gracefully instead of showing a placeholder:
   - The prototype's sample music nights stay off the site; the calendar says "The next lineup is on its way" until real dates are added.
   - Photo slots show a quiet bulb mark until the photo arrives, and the "From the room" grid shows only real photos.
-  - Without a Resy link, the Reservations panel invites guests to join the list. Without a Toast link, Gift Cards says they go on sale soon.
+  - Without an OpenTable link, the booking buttons stay hidden and the Reservations panel invites guests to join the list. Without a Toast link, Gift Cards says they go on sale soon.
 - **Bar allergen notes.** The bar menus' footer lines, such as "Green Room: milk and egg…", aren't shown, because the prototype doesn't show them. Consider moving allergen lines into section notes so guests see them online.
 - **Downloads.** Download links stay hidden until the file exists, so the site never shows a broken link.
 - **Email consent.** The consent line ("News and invitations only. Unsubscribe anytime.") also appears under the coming-soon signup, per the launch checklist.

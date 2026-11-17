@@ -21,7 +21,7 @@ export default {
       ['Hours', site.hoursShort],
       ['Owner', site.owner],
       ['Co-Founders', site.founders.map((f) => f.name).join(' & ')],
-      ['Reservations', 'Resy'],
+      ['Reservations', site.reservations.provider],
       ['Press contact', html`<a href="${mailHref(ctx, 'Press')}">${site.email}</a>`],
     ];
     return html`
