@@ -100,7 +100,7 @@ export function mailHref(ctx, subject, to = ctx.site.email) {
 let formN = 0;
 // Where a signup came from, as the waitlist sheet's "Signed up from" column shows it.
 export function signupSource(ctx, variant) {
-  const page = ctx.page === '404' ? 'Old link' : ctx.holding && ctx.page === 'home' ? 'Coming-soon page' : `${NAV.find((n) => n.id === ctx.page)?.label || ctx.page[0].toUpperCase() + ctx.page.slice(1)} page`;
+  const page = ctx.page === '404' ? 'Old link' : ctx.holding && ctx.page === 'home' ? 'Coming-soon page' : `${NAV.find((n) => n.id === ctx.page)?.label || ctx.page[0].toUpperCase() + ctx.page.slice(1).replace(/-/g, ' ')} page`;
   return variant === 'footer' ? `${page} (footer)` : page;
 }
 
@@ -133,9 +133,11 @@ export function bookButton(ctx, label = `Reserve on ${ctx.site.reservations.prov
 // open; the waitlist signup either way.
 export function comingSoon(ctx) {
   const { reservations } = ctx.site;
-  const book = reservations.url
-    ? html`<div class="hero__book"><p class="hero__soon-line">Book your reservation now through ${reservations.provider}.</p>${bookButton(ctx)}</div>`
-    : '';
+  // Before launch the bar menu has its own page; after, it's the Menus page's Bar tab.
+  const book = html`<div class="hero__book">
+      ${reservations.url ? html`<p class="hero__soon-line">Book your reservation now through ${reservations.provider}.</p>` : ''}
+      <div class="btn-row btn-row--center">${bookButton(ctx)}<a class="btn btn--ghost" href="${ctx.holding ? 'bar-menu' : `${href('menus')}?tab=bar`}">See the bar menu</a></div>
+    </div>`;
   const waitlist = newsletterForm(ctx, 'hero', { list: 'waitlist', done: "You're on the waitlist. First word comes to you." });
   if (!ctx.site.launch.showDate) {
     return html`<p class="hero__soon-title">Coming soon</p>
@@ -245,7 +247,7 @@ function holdingFooter(ctx) {
     <div class="site-footer__rule"><span></span>${bulb(40, site.flicker)}</div>
     <div class="site-footer__legal">
       <span>${site.address.street} · ${site.address.city}</span>
-      <span class="site-footer__legal-links"><a href="${href('waitlist')}"${ctx.page === 'waitlist' ? raw(' aria-current="page"') : ''}>Waitlist</a><a href="${mailHref(ctx)}">${site.email}</a><a href="${mailHref(ctx, 'Private events', site.eventsEmail)}">Private events</a><a href="${site.instagram.url}">Instagram</a></span>
+      <span class="site-footer__legal-links"><a href="${href('waitlist')}"${ctx.page === 'waitlist' ? raw(' aria-current="page"') : ''}>Waitlist</a><a href="bar-menu"${ctx.page === 'bar-menu' ? raw(' aria-current="page"') : ''}>Bar menu</a><a href="${mailHref(ctx)}">${site.email}</a><a href="${mailHref(ctx, 'Private events', site.eventsEmail)}">Private events</a><a href="${site.instagram.url}">Instagram</a></span>
       <span>© ${ctx.year} The Last Table · ${site.owner}</span>
     </div>
   </div>
