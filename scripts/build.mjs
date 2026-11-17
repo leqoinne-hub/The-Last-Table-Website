@@ -18,6 +18,7 @@ import home from '../src/pages/home.mjs';
 import menus from '../src/pages/menus.mjs';
 import reservations from '../src/pages/reservations.mjs';
 import waitlist from '../src/pages/waitlist.mjs';
+import barMenu from '../src/pages/bar-menu.mjs';
 import privateDining from '../src/pages/private-dining.mjs';
 import liveMusic from '../src/pages/live-music.mjs';
 import ourStory from '../src/pages/our-story.mjs';
@@ -33,11 +34,11 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const ASSETS = join(ROOT, 'src', 'assets');
 const OUT = join(ROOT, 'dist');
 const SQS = join(ROOT, 'squarespace', 'generated');
-// While content/site.js → launch.holding is on, the public site is the coming-soon page and the waitlist.
+// While content/site.js → launch.holding is on, the public site is the coming-soon page, the waitlist and the bar menu.
 const holding = site.launch.holding && !process.argv.includes('--full');
 const PAGES = holding
-  ? [holdingPage, { ...waitlist, holding: true }, holdingMissing]
-  : [home, menus, reservations, waitlist, privateDining, liveMusic, ourStory, giftCards, press, careers, contact, faqPage, privacy, terms, notFound];
+  ? [holdingPage, { ...waitlist, holding: true }, { ...barMenu, holding: true }, holdingMissing]
+  : [home, menus, reservations, waitlist, { ...barMenu, noindex: true }, privateDining, liveMusic, ourStory, giftCards, press, careers, contact, faqPage, privacy, terms, notFound];
 
 const siteUrl = (process.env.SITE_URL || site.url).replace(/\/+$/, '');
 const todos = new Set();
@@ -252,7 +253,7 @@ document.addEventListener('DOMContentLoaded', function () {
 // ---------- report ----------
 
 console.log(holding
-  ? `Built the holding page and the waitlist into dist/ for ${siteUrl}: content/site.js → launch.holding is on.\nThe rest of the site stays unpublished. Preview it with \`npm run dev\`.`
+  ? `Built the holding page, the waitlist and the bar menu into dist/ for ${siteUrl}: content/site.js → launch.holding is on.\nThe rest of the site stays unpublished. Preview it with \`npm run dev\`.`
   : `Built ${PAGES.length} pages into dist/ for ${siteUrl}`);
 console.log('Refreshed squarespace/generated/ (menus-code-block, schema-jsonld, header-injection)');
 if (todos.size) {

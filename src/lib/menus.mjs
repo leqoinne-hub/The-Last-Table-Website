@@ -30,16 +30,17 @@ function section(s, level) {
   return html`<section class="tlt-section">
     ${s.head ? html`<div class="tlt-section-head"><${H} class="tlt-section-title">${s.head}</${H}><span class="tlt-section-rule" aria-hidden="true"></span></div>` : ''}
     ${s.items.length ? html`<ul class="tlt-items">${s.items.map((it) => html`<li class="tlt-item">
-      <span class="tlt-item-name">${it.name}</span>${it.price ? html`<span class="tlt-item-price">${it.price}</span>` : ''}
+      <span class="tlt-item-name">${it.name}</span>${it.price && it.price !== '—' ? html`<span class="tlt-item-price">${it.price}</span>` : ''}
       ${it.desc ? html`<span class="tlt-item-desc">${it.desc}</span>` : ''}
     </li>`)}</ul>` : ''}
     ${s.note ? html`<p class="tlt-section-note">${s.note}</p>` : ''}
   </section>`;
 }
 
-export function menuPanel(pages, tab, { selected }) {
+// `standalone` drops the tab wiring, for a menu shown on its own page (the bar menu at /bar-menu).
+export function menuPanel(pages, tab, { selected, standalone = false }) {
   const t = TABS.find((x) => x.id === tab);
-  return html`<div class="tlt-menu-panel" id="panel-${tab}" role="tabpanel" aria-labelledby="tab-${tab}" data-panel="${tab}"${selected ? '' : raw(' data-start-hidden')}>
+  return html`<div class="tlt-menu-panel"${standalone ? '' : raw(` id="panel-${tab}" role="tabpanel" aria-labelledby="tab-${tab}" data-panel="${tab}"${selected ? '' : ' data-start-hidden'}`)}>
   <h2 class="tlt-panel-title">${t.label}</h2>
   ${menuGroups(pages, tab).map((g) => html`<div class="tlt-group">
     ${g.kicker || g.title ? html`<div class="tlt-group-head">${g.kicker ? html`<p class="tlt-group-kicker">${g.kicker}</p>` : ''}${g.title ? html`<h3 class="tlt-group-title">${g.title}</h3>` : ''}</div>` : ''}
