@@ -132,15 +132,15 @@ export function bookButton(ctx, label = `Reserve on ${ctx.site.reservations.prov
 // announced (launch.showDate), otherwise just "Coming soon"; the booking button once reservations are
 // open; the waitlist signup either way.
 export function comingSoon(ctx) {
-  const { reservations } = ctx.site;
+  const { reservations, launch } = ctx.site;
   // Before launch the bar menu has its own page; after, it's the Menus page's Bar tab.
   const book = html`<div class="hero__book">
-      ${reservations.url ? html`<p class="hero__soon-line">Book your reservation now through ${reservations.provider}.</p>` : ''}
+      ${reservations.url || launch.nowOpen ? html`<p class="hero__soon-line">Book your reservations at ${reservations.provider}.</p>` : ''}
       <div class="btn-row btn-row--center">${bookButton(ctx)}<a class="btn btn--ghost" href="${ctx.holding ? 'bar-menu' : `${href('menus')}?tab=bar`}">See the bar menu</a></div>
     </div>`;
   const waitlist = newsletterForm(ctx, 'hero', { list: 'waitlist', done: "You're on the waitlist. First word comes to you." });
-  if (!ctx.site.launch.showDate) {
-    return html`<p class="hero__soon-title">Coming soon</p>
+  if (launch.nowOpen || !launch.showDate) {
+    return html`<p class="hero__soon-title">${launch.nowOpen ? 'Open now' : 'Coming soon'}</p>
     ${book}
     ${waitlist}`;
   }

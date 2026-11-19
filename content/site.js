@@ -35,7 +35,8 @@ export const site = {
   // openAt is the exact opening moment in Chicago time (-06:00 in winter, -05:00 in summer); `date` and
   // `time` are how it reads on the site. Change all three together.
   // showDate: false keeps the date off the site entirely: no countdown, no date, just "Coming soon".
-  launch: { mode: 'auto', openAt: '2026-12-03T16:00:00-06:00', date: 'December 3', time: '4 PM', showDate: false, holding: true },
+  // nowOpen: true turns "Coming soon" into "Open now" and shows the booking line (overrides showDate).
+  launch: { mode: 'auto', openAt: '2026-12-03T16:00:00-06:00', date: 'December 3', time: '4 PM', showDate: false, nowOpen: true, holding: true },
   flicker: true,
 
   // Hours, as shown on the site. `schema` feeds the Google structured data.

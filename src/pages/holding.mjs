@@ -18,8 +18,10 @@ export const holding = {
   id: 'home',
   file: 'index.html',
   holding: true,
-  title: `The Last Table — ${site.launch.showDate ? `Opening ${site.launch.date}` : 'Coming Soon'} · Supper Club at State & Erie, Chicago`,
-  description: `A supper club at State & Erie, Chicago, ${site.launch.showDate ? `opening ${opensOn(site)}` : 'coming soon'}. Join the waitlist for first word.`,
+  title: `The Last Table — ${site.launch.nowOpen ? 'Now Open' : site.launch.showDate ? `Opening ${site.launch.date}` : 'Coming Soon'} · Supper Club at State & Erie, Chicago`,
+  description: site.launch.nowOpen
+    ? `A supper club at State & Erie, Chicago, now open. Book your reservations at ${site.reservations.provider}.`
+    : `A supper club at State & Erie, Chicago, ${site.launch.showDate ? `opening ${opensOn(site)}` : 'coming soon'}. Join the waitlist for first word.`,
   render,
 };
 
@@ -29,6 +31,7 @@ export const holdingMissing = {
   id: '404',
   file: '404.html',
   noindex: true,
-  title: 'Coming Soon · The Last Table · Chicago',
-  description: site.launch.showDate ? `The Last Table opens at State & Erie, Chicago, on ${opensOn(site)}.` : 'The Last Table, a supper club at State & Erie, Chicago, is coming soon.',
+  title: `${site.launch.nowOpen ? 'Now Open' : 'Coming Soon'} · The Last Table · Chicago`,
+  description: site.launch.nowOpen ? 'The Last Table, a supper club at State & Erie, Chicago, is now open.'
+    : site.launch.showDate ? `The Last Table opens at State & Erie, Chicago, on ${opensOn(site)}.` : 'The Last Table, a supper club at State & Erie, Chicago, is coming soon.',
 };
