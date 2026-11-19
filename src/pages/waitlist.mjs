@@ -9,7 +9,7 @@ export default {
   file: 'waitlist.html',
   path: 'waitlist',
   title: 'Join the Waitlist · The Last Table · Supper Club · Chicago',
-  description: `Join the waitlist for The Last Table, a supper club ${site.launch.showDate ? `opening ${site.launch.date} at` : 'coming soon to'} State & Erie, Chicago. First word on opening night, reservations and the menus.`,
+  description: `Join the waitlist for The Last Table, a supper club ${site.launch.nowOpen ? 'now open at' : site.launch.showDate ? `opening ${site.launch.date} at` : 'coming soon to'} State & Erie, Chicago. ${site.launch.nowOpen ? 'First word on special nights, new menus and the late set.' : 'First word on opening night, reservations and the menus.'}`,
   render(ctx) {
     const endpoint = site.forms.newsletter;
     return html`
@@ -18,7 +18,7 @@ export default {
     ${ctx.holding ? html`<a class="waitlist__mark" href="./"><img src="assets/vector/primary/tlt-primary-linen-transparent.svg" alt="The Last Table — home" width="1526" height="432"></a>` : ''}
     <p class="kicker kicker--center">The waitlist</p>
     <h1 class="h1 waitlist__title">Be the first to know.</h1>
-    <p class="lede waitlist__lede">${site.launch.showDate ? `Doors open ${opensOn(site)}. ` : ''}Join the waitlist for first word on opening night, reservations, the menus and the late set.</p>
+    <p class="lede waitlist__lede">${site.launch.showDate ? `Doors open ${opensOn(site)}. ` : ''}Join the waitlist for first word on ${site.launch.nowOpen ? 'special nights, new menus' : 'opening night, reservations, the menus'} and the late set.</p>
     <form class="waitlist__form" data-form="newsletter" data-list="waitlist" action="${endpoint || mailHref(ctx, 'Join the waitlist')}" method="post"${endpoint ? '' : raw(' enctype="text/plain"')} novalidate>
       <div class="field-row">
         <div class="field">
